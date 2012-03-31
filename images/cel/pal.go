@@ -1,7 +1,3 @@
-/*
- *    image/cel
- */
-
 package cel
 
 import "github.com/mewkiz/blizzconv/images/imgconf"

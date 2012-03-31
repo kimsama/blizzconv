@@ -166,9 +166,7 @@ func createDumpDir(frameDir, palDir, imgName string) (dumpDir string, err error)
    }
    imgDir, _ := path.Split(imgPath)
    dumpDir = path.Clean(dumpPrefix + imgDir + frameDir + palDir) + "/"
-   /**
-    *    prevent directory traversal
-    */
+   // prevent directory traversal
    if false == strings.HasPrefix(dumpDir, dumpPrefix) {
       return "", fmt.Errorf("path (%s) contains no dump prefix (%s).", dumpDir, dumpPrefix)
    }
@@ -181,6 +179,9 @@ func createDumpDir(frameDir, palDir, imgName string) (dumpDir string, err error)
 
 // pngOutput creates a new png image at pngPath from img.
 func pngOutput(pngPath string, img image.Image) (err error) {
+   if img == nil {
+      return nil
+   }
    f, err := os.Create(pngPath)
    if err != nil {
       return err

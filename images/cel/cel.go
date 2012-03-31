@@ -11,7 +11,7 @@
 //
 // CEL frame format:
 //    header   []byte   // Optional
-//    data     []byte   // Frame pixel content. ref: DecodeType1
+//    data     []byte   // Frame pixel content. ref: DecodeFrameType1
 package cel
 
 import "github.com/mewkiz/blizzconv/images/imgconf"
@@ -20,7 +20,6 @@ import dbg "fmt"
 import "encoding/binary"
 import "image"
 import "image/color"
-import "log"
 import "os"
 
 // Config holds an image's palette and dimensions.
@@ -39,22 +38,16 @@ func DecodeAll(celName string, conf *Config) (imgs []image.Image, err error) {
       return nil, err
    }
    for frameNum, frame := range frames {
-      var img image.Image
-      switch celName {
-      case "town.cel", "l1.cel", "l2.cel", "l3.cel", "l4.cel":
-         log.Printf("decode not implemented for '%s'.", celName)
-         return nil, nil
-      default:
-         width, ok := conf.FrameWidth[frameNum]
-         if !ok {
-            width = conf.Width
-         }
-         height, ok := conf.FrameHeight[frameNum]
-         if !ok {
-            height = conf.Height
-         }
-         img = DecodeType1(frame, width, height, conf.Pal)
+      width, ok := conf.FrameWidth[frameNum]
+      if !ok {
+         width = conf.Width
       }
+      height, ok := conf.FrameHeight[frameNum]
+      if !ok {
+         height = conf.Height
+      }
+      decodeFrame := GetFrameDecoder(celName, frame, frameNum)
+      img := decodeFrame(frame, width, height, conf.Pal)
       imgs = append(imgs, img)
    }
    return imgs, nil
