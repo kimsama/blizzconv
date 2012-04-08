@@ -1,8 +1,7 @@
 package cel
 
-import "github.com/mewkiz/blizzconv/images/imgconf"
+import "github.com/mewkiz/blizzconv/mpq"
 
-import dbg "fmt"
 import "fmt"
 import "image/color"
 import "io/ioutil"
@@ -18,8 +17,7 @@ import "io/ioutil"
 //    g  byte  // green
 //    b  byte  // blue
 func GetPal(relPalPath string) (pal color.Palette, err error) {
-   palPath := imgconf.MpqExtractPath + relPalPath
-   dbg.Println("pal:", palPath)
+   palPath := mpq.ExtractPath + relPalPath
    buf, err := ioutil.ReadFile(palPath)
    if err != nil {
       return nil, err

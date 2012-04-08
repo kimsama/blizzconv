@@ -1,14 +1,15 @@
 package main
 
+import "github.com/0xC3/progressbar"
 import "github.com/mewkiz/blizzconv/images/cel"
 ///import "github.com/mewkiz/blizzconv/images/cl2"
 import "github.com/mewkiz/blizzconv/images/imgarchive"
 import "github.com/mewkiz/blizzconv/images/imgconf"
+import "github.com/mewkiz/blizzconv/mpq"
+import "github.com/mewkiz/pkg/pngutil"
 
 import "flag"
 import "fmt"
-import "image"
-import "image/png"
 import "log"
 import "os"
 import "path"
@@ -19,15 +20,22 @@ var flagAll bool
 func init() {
    flag.Usage = usage
    flag.BoolVar(&flagAll, "a", false, "Dump all image files.")
-   flag.StringVar(&imgconf.IniPath, "ini", "cel.ini", "Path to an ini file containing image information. Note: 'cl2.ini' will be used for files that have the '.cl2' extension.")
-   flag.StringVar(&imgconf.MpqExtractPath, "mpqdump", "mpqdump/", "Path to an extracted MPQ file.")
+   flag.StringVar(&imgconf.IniPath, "celini", "cel.ini", "Path to an ini file containing image information.")
+   flag.StringVar(&mpq.ExtractPath, "mpqdump", "mpqdump/", "Path to an extracted MPQ file.")
+   flag.StringVar(&mpq.IniPath, "mpqini", "mpq.ini", "Path to an ini file containing relative path information.")
    flag.Parse()
+   err := mpq.Init()
+   if err != nil {
+      log.Fatalln(err)
+   }
 }
 
 func usage() {
    fmt.Fprintf(os.Stderr, "usage: %s [OPTIONS]... [name.cel|name.cl2]...\n", os.Args[0])
    flag.PrintDefaults()
 }
+
+var bar *progressbar.Bar
 
 func main() {
    if flag.NArg() > 0 {
@@ -40,8 +48,12 @@ func main() {
       log.Fatalln(err)
    }
    if flagAll {
+      bar, err = progressbar.New(imgconf.Len())
+      if err != nil {
+         log.Fatalln(err)
+      }
       // dump all images in the ini file.
-      err := imgconf.AllFunc(Dump)
+      err := imgconf.AllFunc(dump)
       if err != nil {
          log.Fatalln(err)
       }
@@ -52,16 +64,19 @@ func main() {
       os.Exit(1)
    }
    for _, imgName := range flag.Args() {
-      err := Dump(imgName)
+      err := dump(imgName)
       if err != nil {
          log.Fatalln(err)
       }
    }
 }
 
-// Dump extracts archived images if there are any, decodes image configs (pals)
+// dump extracts archived images if there are any, decodes image configs (pals)
 // and dumps the image's frames, once for each image config.
-func Dump(imgName string) (err error) {
+func dump(imgName string) (err error) {
+   if flagAll {
+      bar.UpdateInc()
+   }
    _, found := imgconf.GetImageCount(imgName)
    if found {
       // extract archived images
@@ -112,9 +127,6 @@ func dumpFrames(conf *cel.Config, palDir, imgName string) (err error) {
       pngName = nameWithoutExt + ".png"
    }
    var dumpDir string
-   /// ### todo ###
-   ///   - should be len(imgs) > 1?
-   /// ############
    if len(imgs) > 0 {
       dumpDir, err = createDumpDir(frameDir, palDir, imgName)
       if err != nil {
@@ -125,7 +137,7 @@ func dumpFrames(conf *cel.Config, palDir, imgName string) (err error) {
       if len(imgs) > 1 {
          pngName = fmt.Sprintf("%s_%04d.png", nameWithoutExt, frameNum)
       }
-      err := pngOutput(dumpDir + pngName, img)
+      err := pngutil.WriteFile(dumpDir + pngName, img)
       if err != nil {
          return err
       }
@@ -133,6 +145,7 @@ func dumpFrames(conf *cel.Config, palDir, imgName string) (err error) {
    return nil
 }
 
+// dumpPrefix is the name of the dump directory.
 const dumpPrefix = "_dump_/"
 
 // createDumpDir creates a dump directory for the image.
@@ -160,14 +173,14 @@ const dumpPrefix = "_dump_/"
 //       _dump_/imgDir/name/pal_0002/name_0001.png
 //       _dump_/imgDir/name/pal_0002/name_0002.png
 func createDumpDir(frameDir, palDir, imgName string) (dumpDir string, err error) {
-   imgPath, err := imgconf.GetRelPath(imgName)
+   imgPath, err := mpq.GetRelPath(imgName)
    if err != nil {
       return "", err
    }
    imgDir, _ := path.Split(imgPath)
    dumpDir = path.Clean(dumpPrefix + imgDir + frameDir + palDir) + "/"
    // prevent directory traversal
-   if false == strings.HasPrefix(dumpDir, dumpPrefix) {
+   if !strings.HasPrefix(dumpDir, dumpPrefix) {
       return "", fmt.Errorf("path (%s) contains no dump prefix (%s).", dumpDir, dumpPrefix)
    }
    err = os.MkdirAll(dumpDir, 0755)
@@ -175,21 +188,4 @@ func createDumpDir(frameDir, palDir, imgName string) (dumpDir string, err error)
       return "", err
    }
    return dumpDir, nil
-}
-
-// pngOutput creates a new png image at pngPath from img.
-func pngOutput(pngPath string, img image.Image) (err error) {
-   if img == nil {
-      return nil
-   }
-   f, err := os.Create(pngPath)
-   if err != nil {
-      return err
-   }
-   defer f.Close()
-   err = png.Encode(f, img)
-   if err != nil {
-      return err
-   }
-   return nil
 }

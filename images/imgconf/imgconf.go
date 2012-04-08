@@ -12,9 +12,6 @@ import "sort"
 import "strconv"
 import "strings"
 
-// MpqExtractPath is the path to an extracted MPQ file.
-var MpqExtractPath string
-
 // IniPath is the path to the 'cel.ini' or 'cl2.ini' file which provides CEL and
 // CL2 image information.
 var IniPath string
@@ -28,6 +25,11 @@ func Init() (err error) {
       return err
    }
    return nil
+}
+
+// Len returns the number of images in the ini file.
+func Len() int {
+   return len(dict)
 }
 
 // AllFunc calls the function f with the parameter imgName once for each image
@@ -48,24 +50,6 @@ func AllFunc(f func(string) error) (err error) {
       }
    }
    return nil
-}
-
-// GetRelPath returns the relative path to the image.
-func GetRelPath(imgName string) (relPath string, err error) {
-   relPath, found := dict.GetString(imgName, "path")
-   if !found {
-      return "", fmt.Errorf("path not found for '%s'.", imgName)
-   }
-   return relPath, nil
-}
-
-// GetPath returns the full path to the image.
-func GetPath(imgName string) (path string, err error) {
-   path, err = GetRelPath(imgName)
-   if err != nil {
-      return "", err
-   }
-   return MpqExtractPath + path, nil
 }
 
 // GetWidth returns the image width.

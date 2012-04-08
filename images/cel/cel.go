@@ -15,8 +15,8 @@
 package cel
 
 import "github.com/mewkiz/blizzconv/images/imgconf"
+import "github.com/mewkiz/blizzconv/mpq"
 
-import dbg "fmt"
 import "encoding/binary"
 import "image"
 import "image/color"
@@ -56,24 +56,22 @@ func DecodeAll(celName string, conf *Config) (imgs []image.Image, err error) {
 // GetFrames returns a slice of frames, whose content has been retrieved based
 // on the CEL format described above.
 func GetFrames(celName string) (frames [][]byte, err error) {
-   celPath, err := imgconf.GetPath(celName)
+   celPath, err := mpq.GetPath(celName)
    if err != nil {
       return nil, err
    }
-   dbg.Println("cel:", celPath)
-   f, err := os.Open(celPath)
+   fr, err := os.Open(celPath)
    if err != nil {
       return nil, err
    }
-   defer f.Close()
+   defer fr.Close()
    var frameCount uint32
-   err = binary.Read(f, binary.LittleEndian, &frameCount)
+   err = binary.Read(fr, binary.LittleEndian, &frameCount)
    if err != nil {
       return nil, err
    }
-   dbg.Println("frame count:", frameCount)
    frameOffsets := make([]uint32, frameCount + 1)
-   err = binary.Read(f, binary.LittleEndian, frameOffsets)
+   err = binary.Read(fr, binary.LittleEndian, frameOffsets)
    if err != nil {
       return nil, err
    }
@@ -83,7 +81,7 @@ func GetFrames(celName string) (frames [][]byte, err error) {
       frameEnd := int64(frameOffsets[frameNum + 1])
       frameSize := frameEnd - frameStart
       frame := make([]byte, frameSize)
-      _, err := f.ReadAt(frame, frameStart)
+      _, err := fr.ReadAt(frame, frameStart)
       if err != nil {
          return nil, err
       }

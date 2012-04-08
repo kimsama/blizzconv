@@ -2,8 +2,8 @@
 package imgarchive
 
 import "github.com/mewkiz/blizzconv/images/imgconf"
+import "github.com/mewkiz/blizzconv/mpq"
 
-import dbg "fmt"
 import "fmt"
 import "os"
 import "path"
@@ -15,11 +15,10 @@ func Extract(archiveName string) (err error) {
    if !found {
       return fmt.Errorf("no archived images in '%s'.", archiveName)
    }
-   archivePath, err := imgconf.GetPath(archiveName)
+   archivePath, err := mpq.GetPath(archiveName)
    if err != nil {
       return err
    }
-   dbg.Println("archive path:", archivePath)
    fr, err := os.Open(archivePath)
    if err != nil {
       return err

@@ -1,6 +1,6 @@
 package cel
 
-import dbg "fmt"
+///import dbg "fmt"
 import "image"
 import "image/color"
 
@@ -11,31 +11,31 @@ func GetFrameDecoder(celName string, frame []byte, frameNum int) func ([]byte, i
    case "l1.cel", "l2.cel", "l3.cel", "l4.cel", "town.cel":
       // Some regular (Type1) CEL images just happen to have the exact frame
       // size of 0x220, 0x320 and 0x400. Therefor the isType* functions are
-      // needed.
+      // required.
       switch frameSize {
       case 0x400:
          if isType0(celName, frameNum) {
-            dbg.Printf("type 0: plain 32x32        [X]   - %4d\n", frameNum)
+            ///dbg.Printf("type 0: plain 32x32        [X]   - %4d\n", frameNum)
             return DecodeFrameType0
          }
       case 0x220:
          if isType2or4(frame) {
-            dbg.Printf("type 2: triangle right      |>   - %4d\n", frameNum)
+            ///dbg.Printf("type 2: triangle left      <|    - %4d\n", frameNum)
             return DecodeFrameType2
          } else if isType3or5(frame) {
-            dbg.Printf("type 3: triangle left      <|    - %4d\n", frameNum)
+            ///dbg.Printf("type 3: triangle right      |>   - %4d\n", frameNum)
             return DecodeFrameType3
          }
       case 0x320:
          if isType2or4(frame) {
-            dbg.Printf("type 4: trapezoid right     |\\   - %4d\n", frameNum)
+            ///dbg.Printf("type 4: trapezoid left     /|    - %4d\n", frameNum)
             return DecodeFrameType4
          } else if isType3or5(frame) {
-            dbg.Printf("type 5: trapezoid left     /|    - %4d\n", frameNum)
+            ///dbg.Printf("type 5: trapezoid right     |\\   - %4d\n", frameNum)
             return DecodeFrameType5
          }
       default:
-         dbg.Printf("type 1: regular cel        [ ]   - %4d\n", frameNum)
+         ///dbg.Printf("type 1: regular cel        [ ]   - %4d\n", frameNum)
       }
    }
    return DecodeFrameType1
@@ -70,10 +70,11 @@ func isType0(celName string, frameNum int) bool {
 }
 
 // isType2or4 returns true if the image is a triangle or a trapezoid pointing to
-// the right.
+// the left.
+//
 // ref: DecodeFrameType2 and DecodeFrameType4
 func isType2or4(frame []byte) bool {
-   zeroPositions := []int{2, 3, 14, 15, 34, 35, 62, 63, 98, 99, 142, 143, 194, 195, 254, 255}
+   zeroPositions := []int{0, 1, 8, 9, 24, 25, 48, 49, 80, 81, 120, 121, 168, 169, 224, 225}
    for _, zeroPos := range zeroPositions {
       if frame[zeroPos] != 0x00 {
          return false
@@ -83,10 +84,11 @@ func isType2or4(frame []byte) bool {
 }
 
 // isType3or5 returns true if the image is a triangle or a trapezoid pointing to
-// the left.
+// the right.
+//
 // ref: DecodeFrameType3 and DecodeFrameType5
 func isType3or5(frame []byte) bool {
-   zeroPositions := []int{0, 1, 8, 9, 24, 25, 48, 49, 80, 81, 120, 121, 168, 169, 224, 225}
+   zeroPositions := []int{2, 3, 14, 15, 34, 35, 62, 63, 98, 99, 142, 143, 194, 195, 254, 255}
    for _, zeroPos := range zeroPositions {
       if frame[zeroPos] != 0x00 {
          return false
