@@ -35,6 +35,7 @@ func usage() {
    flag.PrintDefaults()
 }
 
+// bar represents the progress bar.
 var bar *progressbar.Bar
 
 func main() {
@@ -87,7 +88,7 @@ func dump(imgName string) (err error) {
       return nil
    }
    relPalPaths := imgconf.GetRelPalPaths(imgName)
-   for palNum, relPalPath := range relPalPaths {
+   for _, relPalPath := range relPalPaths {
       /// ### todo ###
       ///   - add support for cl2
       ///   - maybe this should be handled with a wrapper library?
@@ -98,7 +99,7 @@ func dump(imgName string) (err error) {
       }
       var palDir string
       if len(relPalPaths) > 1 {
-         palDir = fmt.Sprintf("pal_%04d/", palNum)
+         palDir = path.Base(relPalPath) + "/"
       }
       // dump the image's frames using conf (pal)
       err = dumpFrames(conf, palDir, imgName)
@@ -110,8 +111,7 @@ func dump(imgName string) (err error) {
 }
 
 // dumpFrames decodes an image's frames using a given image config (pal),
-// creates a dump directory if there are more than one image and converts each
-// frame to a new png image.
+// creates a dump directory and stores each frame as a new png image.
 func dumpFrames(conf *cel.Config, palDir, imgName string) (err error) {
    // decode frames using the given image config (pal)
    imgs, err := cel.DecodeAll(imgName, conf)
