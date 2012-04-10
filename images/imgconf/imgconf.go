@@ -136,7 +136,7 @@ func getFrameDimension(rawFramesDimensions string) (frameDimension map[int]int, 
          return nil, fmt.Errorf("no delim ':' found for '%s'.", rawFramesDimension)
       }
       rawFrameNums := rawFramesDimension[:posDelim]
-      rawDimension := rawFramesDimension[posDelim + 1:]
+      rawDimension := rawFramesDimension[posDelim+1:]
       dimension, err := strconv.Atoi(rawDimension)
       if err != nil {
          return nil, err
@@ -153,11 +153,11 @@ func getFrameDimension(rawFramesDimensions string) (frameDimension map[int]int, 
          if err != nil {
             return nil, err
          }
-         frameNumEnd, err := strconv.Atoi(rawFrameNums[posDash + 1:])
+         frameNumEnd, err := strconv.Atoi(rawFrameNums[posDash+1:])
          if err != nil {
             return nil, err
          }
-         for frameNum := frameNumStart; frameNum <= frameNumEnd; frameNum ++ {
+         for frameNum := frameNumStart; frameNum <= frameNumEnd; frameNum++ {
             frameDimension[frameNum] = dimension
          }
       }

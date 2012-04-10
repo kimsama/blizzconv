@@ -5,13 +5,22 @@
 // format.
 //
 // CEL format:
-//    frameCount     uint32                  // (little endian)
-//    frameOffsets   [frameCount + 1]uint32  // (little endian)
-//    frames         [frameCount][]byte      // The content of frameNum starts at frameOffsets[frameNum] and ends at frameOffsets[frameNum + 1].
+//    // (little endian)
+//    frameCount   uint32
+//    // frameOffsets contains the offsets to each frame. (little endian)
+//    frameOffsets [frameCount + 1]uint32
+//    // frames contains the header and data of each frame.
+//    //    start: frameOffsets[frameNum]
+//    //    end:   frameOffsets[frameNum + 1]
+//    frames       [frameCount][]byte
 //
 // CEL frame format:
-//    header   []byte   // Optional
-//    data     []byte   // Frame pixel content. ref: DecodeFrameType1
+//    // header is optional
+//    header []byte
+//    // data contains the frame pixel content.
+//    //
+//    // ref: DecodeFrameType1
+//    data   []byte
 package cel
 
 import "github.com/mewkiz/blizzconv/images/imgconf"
@@ -70,7 +79,7 @@ func GetFrames(celName string) (frames [][]byte, err error) {
    if err != nil {
       return nil, err
    }
-   frameOffsets := make([]uint32, frameCount + 1)
+   frameOffsets := make([]uint32, frameCount+1)
    err = binary.Read(fr, binary.LittleEndian, frameOffsets)
    if err != nil {
       return nil, err
@@ -78,7 +87,7 @@ func GetFrames(celName string) (frames [][]byte, err error) {
    for frameNum := uint32(0); frameNum < frameCount; frameNum++ {
       headerSize := imgconf.GetHeaderSize(celName)
       frameStart := int64(frameOffsets[frameNum]) + int64(headerSize)
-      frameEnd := int64(frameOffsets[frameNum + 1])
+      frameEnd := int64(frameOffsets[frameNum+1])
       frameSize := frameEnd - frameStart
       frame := make([]byte, frameSize)
       _, err := fr.ReadAt(frame, frameStart)
@@ -112,12 +121,12 @@ func GetConf(celName, relPalPath string) (conf *Config, err error) {
    if err != nil {
       return nil, err
    }
-   conf = &Config {
-      Width:         width,
-      Height:        height,
-      Pal:           pal,
-      FrameWidth:    frameWidth,
-      FrameHeight:   frameHeight,
+   conf = &Config{
+      Width:       width,
+      Height:      height,
+      Pal:         pal,
+      FrameWidth:  frameWidth,
+      FrameHeight: frameHeight,
    }
    return conf, nil
 }

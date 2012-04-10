@@ -59,8 +59,8 @@ func dump(minName string) (err error) {
    if err != nil {
       return err
    }
-   nameWithoutExt := minName[:len(minName) - len(path.Ext(minName))]
-   imgName :=  nameWithoutExt + ".cel"
+   nameWithoutExt := minName[:len(minName)-len(path.Ext(minName))]
+   imgName := nameWithoutExt + ".cel"
    relPalPaths := imgconf.GetRelPalPaths(imgName)
    for _, relPalPath := range relPalPaths {
       conf, err := cel.GetConf(imgName, relPalPath)
@@ -80,7 +80,7 @@ func dump(minName string) (err error) {
       if err != nil {
          return err
       }
-      dumpDir := path.Clean(dumpPrefix + "pillars/" + nameWithoutExt) + "/" + palDir
+      dumpDir := path.Clean(dumpPrefix+"pillars/"+nameWithoutExt) + "/" + palDir
       // prevent directory traversal
       if !strings.HasPrefix(dumpDir, dumpPrefix) {
          return fmt.Errorf("path (%s) contains no dump prefix (%s).", dumpDir, dumpPrefix)

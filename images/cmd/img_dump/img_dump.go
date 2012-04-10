@@ -119,7 +119,7 @@ func dumpFrames(conf *cel.Config, palDir, imgName string) (err error) {
       return err
    }
    // create dumpDir
-   nameWithoutExt := imgName[:len(imgName) - len(path.Ext(imgName))]
+   nameWithoutExt := imgName[:len(imgName)-len(path.Ext(imgName))]
    var frameDir, pngName string
    if len(imgs) > 1 {
       frameDir = nameWithoutExt + "/"
@@ -137,7 +137,7 @@ func dumpFrames(conf *cel.Config, palDir, imgName string) (err error) {
       if len(imgs) > 1 {
          pngName = fmt.Sprintf("%s_%04d.png", nameWithoutExt, frameNum)
       }
-      err := pngutil.WriteFile(dumpDir + pngName, img)
+      err := pngutil.WriteFile(dumpDir+pngName, img)
       if err != nil {
          return err
       }
@@ -178,7 +178,7 @@ func createDumpDir(frameDir, palDir, imgName string) (dumpDir string, err error)
       return "", err
    }
    imgDir, _ := path.Split(imgPath)
-   dumpDir = path.Clean(dumpPrefix + imgDir + frameDir + palDir) + "/"
+   dumpDir = path.Clean(dumpPrefix+imgDir+frameDir+palDir) + "/"
    // prevent directory traversal
    if !strings.HasPrefix(dumpDir, dumpPrefix) {
       return "", fmt.Errorf("path (%s) contains no dump prefix (%s).", dumpDir, dumpPrefix)

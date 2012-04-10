@@ -291,7 +291,7 @@ func decodeLineTransparencyLeft(rgba *image.RGBA, setPixel func(*image.RGBA, col
       setPixel(rgba, color.RGBA{})
    }
    // zeroes (transparent pixels)
-   for i := 0 ; i < zeroCount; i++ {
+   for i := 0; i < zeroCount; i++ {
       setPixel(rgba, color.RGBA{})
    }
    // regular pixels
@@ -306,11 +306,11 @@ func decodeLineTransparencyLeft(rgba *image.RGBA, setPixel func(*image.RGBA, col
 // line is assumed to have a width of 32 pixels.
 func decodeLineTransparencyRight(rgba *image.RGBA, setPixel func(*image.RGBA, color.Color), frame []byte, zeroCount, decodeCount int, pal color.Palette) {
    // regular pixels
-   for i := 0; i < decodeCount - zeroCount; i++ {
+   for i := 0; i < decodeCount-zeroCount; i++ {
       setPixel(rgba, pal[frame[i]])
    }
    // zeroes (transparent pixels)
-   for i := 0 ; i < zeroCount; i++ {
+   for i := 0; i < zeroCount; i++ {
       setPixel(rgba, color.RGBA{})
    }
    // transparent pixels

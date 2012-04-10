@@ -5,7 +5,7 @@ import "image"
 import "image/color"
 
 // GetFrameDecoder returns the appropriate function for decoding the frame.
-func GetFrameDecoder(celName string, frame []byte, frameNum int) func ([]byte, int, int, color.Palette) image.Image {
+func GetFrameDecoder(celName string, frame []byte, frameNum int) func([]byte, int, int, color.Palette) image.Image {
    frameSize := len(frame)
    switch celName {
    case "l1.cel", "l2.cel", "l3.cel", "l4.cel", "town.cel":
@@ -155,7 +155,7 @@ func getPixelSetter(width, height int) func(*image.RGBA, color.Color) {
    y = height - 1
    setPixel := func(rgba *image.RGBA, c color.Color) {
       rgba.Set(x, y, c)
-      if x == width - 1 {
+      if x == width-1 {
          x = 0
          y--
       } else {

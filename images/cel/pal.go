@@ -13,21 +13,21 @@ import "io/ioutil"
 //    c [256]Color
 //
 // Color format:
-//    r  byte  // red
-//    g  byte  // green
-//    b  byte  // blue
+//    r byte   // red
+//    g byte   // green
+//    b byte   // blue
 func GetPal(relPalPath string) (pal color.Palette, err error) {
    palPath := mpq.ExtractPath + relPalPath
    buf, err := ioutil.ReadFile(palPath)
    if err != nil {
       return nil, err
    }
-   if len(buf) != 256 * 3 {
+   if len(buf) != 256*3 {
       return nil, fmt.Errorf("invalid pal size (%d) for '%s'.", len(buf), relPalPath)
    }
    pal = make(color.Palette, 256)
    for i := range pal {
-      pal[i] = color.RGBA{buf[3 * i], buf[3 * i + 1], buf[3 * i + 2], 0xFF}
+      pal[i] = color.RGBA{buf[3*i], buf[3*i+1], buf[3*i+2], 0xFF}
    }
    return pal, nil
 }

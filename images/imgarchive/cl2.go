@@ -35,7 +35,7 @@ func ExtractCl2(r *os.File, ws []*os.File) (err error) {
       if err != nil {
          return err
       }
-      frameOffsets := make([]uint32, frameCount + 1)
+      frameOffsets := make([]uint32, frameCount+1)
       err = binary.Read(r, binary.LittleEndian, frameOffsets)
       if err != nil {
          return err
@@ -46,8 +46,8 @@ func ExtractCl2(r *os.File, ws []*os.File) (err error) {
          return err
       }
       for frameNum := uint32(0); frameNum <= frameCount; frameNum++ {
-         diff := frameOffsets[0] - (1 + frameCount + 1) * 4
-         err = binary.Write(w, binary.LittleEndian, frameOffsets[frameNum] - diff)
+         diff := frameOffsets[0] - (1+frameCount+1)*4
+         err = binary.Write(w, binary.LittleEndian, frameOffsets[frameNum]-diff)
          if err != nil {
             return err
          }

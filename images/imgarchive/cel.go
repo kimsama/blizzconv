@@ -25,14 +25,14 @@ func ExtractCel(r *os.File, ws []*os.File) (err error) {
    }
    for imageNum := 0; imageNum < imageCount; imageNum++ {
       imageStart := int64(imageOffsets[imageNum])
-      if imageNum == imageCount - 1 {
+      if imageNum == imageCount-1 {
          // Last image, so copy all that's left.
          _, err = io.Copy(ws[imageNum], r)
          if err != nil {
             return err
          }
       } else {
-         imageSize := int64(imageOffsets[imageNum + 1]) - imageStart
+         imageSize := int64(imageOffsets[imageNum+1]) - imageStart
          _, err = io.CopyN(ws[imageNum], r, imageSize)
          if err != nil {
             return err

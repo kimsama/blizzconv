@@ -79,7 +79,7 @@ func Parse(name string) (pillars []Pillar, err error) {
             pillar.Blocks[i].IsValid = true
             pillar.Blocks[i].FrameNum = frameNumPlus1 - 1
          }
-         pillar.Blocks[i].Type = int(tmp[i] & 0x7000) >> 12
+         pillar.Blocks[i].Type = int(tmp[i]&0x7000) >> 12
       }
       pillars = append(pillars, pillar)
    }

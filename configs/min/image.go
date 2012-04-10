@@ -52,23 +52,23 @@ func PillarImage(levelFrames []image.Image, pillar Pillar) (img image.Image) {
 //    +----+----+
 var BlockRect = map[int]image.Rectangle{
    // even blockNum
-    0: image.Rect( 0, 32 * 0, 32, 32 * 1),
-    2: image.Rect( 0, 32 * 1, 32, 32 * 2),
-    4: image.Rect( 0, 32 * 2, 32, 32 * 3),
-    6: image.Rect( 0, 32 * 3, 32, 32 * 4),
-    8: image.Rect( 0, 32 * 4, 32, 32 * 5),
-   10: image.Rect( 0, 32 * 5, 32, 32 * 6),
-   12: image.Rect( 0, 32 * 6, 32, 32 * 7),
-   14: image.Rect( 0, 32 * 7, 32, 32 * 8),
+   0:  image.Rect(0, 32*0, 32, 32*1),
+   2:  image.Rect(0, 32*1, 32, 32*2),
+   4:  image.Rect(0, 32*2, 32, 32*3),
+   6:  image.Rect(0, 32*3, 32, 32*4),
+   8:  image.Rect(0, 32*4, 32, 32*5),
+   10: image.Rect(0, 32*5, 32, 32*6),
+   12: image.Rect(0, 32*6, 32, 32*7),
+   14: image.Rect(0, 32*7, 32, 32*8),
    // odd blockNum
-    1: image.Rect(32, 32 * 0, 64, 32 * 1),
-    3: image.Rect(32, 32 * 1, 64, 32 * 2),
-    5: image.Rect(32, 32 * 2, 64, 32 * 3),
-    7: image.Rect(32, 32 * 3, 64, 32 * 4),
-    9: image.Rect(32, 32 * 4, 64, 32 * 5),
-   11: image.Rect(32, 32 * 5, 64, 32 * 6),
-   13: image.Rect(32, 32 * 6, 64, 32 * 7),
-   15: image.Rect(32, 32 * 7, 64, 32 * 8),
+   1:  image.Rect(32, 32*0, 64, 32*1),
+   3:  image.Rect(32, 32*1, 64, 32*2),
+   5:  image.Rect(32, 32*2, 64, 32*3),
+   7:  image.Rect(32, 32*3, 64, 32*4),
+   9:  image.Rect(32, 32*4, 64, 32*5),
+   11: image.Rect(32, 32*5, 64, 32*6),
+   13: image.Rect(32, 32*6, 64, 32*7),
+   15: image.Rect(32, 32*7, 64, 32*8),
 }
 
 // drawSide draws each block on one side of the pillar, starting from the bottom
