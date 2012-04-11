@@ -2,6 +2,7 @@ package main
 
 import "github.com/0xC3/progressbar"
 import "github.com/mewkiz/blizzconv/configs/min"
+import "github.com/mewkiz/blizzconv/configs/til"
 import "github.com/mewkiz/blizzconv/images/cel"
 import "github.com/mewkiz/blizzconv/images/imgconf"
 import "github.com/mewkiz/blizzconv/mpq"
@@ -33,13 +34,13 @@ func init() {
 }
 
 func usage() {
-   fmt.Fprintf(os.Stderr, "usage: %s [OPTIONS]... [name.min]...\n", os.Args[0])
+   fmt.Fprintf(os.Stderr, "usage: %s [OPTIONS]... [name.til]...\n", os.Args[0])
    flag.PrintDefaults()
 }
 
 func main() {
-   for _, minName := range flag.Args() {
-      err := minDump(minName)
+   for _, tilName := range flag.Args() {
+      err := tilDump(tilName)
       if err != nil {
          log.Fatalln(err)
       }
@@ -52,14 +53,20 @@ var bar *progressbar.Bar
 // dumpPrefix is the name of the dump directory.
 const dumpPrefix = "_dump_/"
 
-// minDump creates a dump directory and dumps the MIN file's pillars using the
-// frames from a CEL image level file, once for each image config (pal).
-func minDump(minName string) (err error) {
+// tilDump creates a dump directory and dumps the TIL file's squares using the
+// pillars constructed based on the MIN format, once for each image config
+// (pal).
+func tilDump(tilName string) (err error) {
+   squares, err := til.Parse(tilName)
+   if err != nil {
+      return err
+   }
+   nameWithoutExt := tilName[:len(tilName)-len(path.Ext(tilName))]
+   minName := nameWithoutExt + ".min"
    pillars, err := min.Parse(minName)
    if err != nil {
       return err
    }
-   nameWithoutExt := minName[:len(minName)-len(path.Ext(minName))]
    imgName := nameWithoutExt + ".cel"
    relPalPaths := imgconf.GetRelPalPaths(imgName)
    for _, relPalPath := range relPalPaths {
@@ -72,7 +79,7 @@ func minDump(minName string) (err error) {
          dbg.Println("using pal:", relPalPath)
          palDir = path.Base(relPalPath) + "/"
       }
-      bar, err = progressbar.New(len(pillars))
+      bar, err = progressbar.New(len(squares))
       if err != nil {
          return err
       }
@@ -80,7 +87,7 @@ func minDump(minName string) (err error) {
       if err != nil {
          return err
       }
-      dumpDir := path.Clean(dumpPrefix+"_pillars_/"+nameWithoutExt) + "/" + palDir
+      dumpDir := path.Clean(dumpPrefix+"_squares_/"+nameWithoutExt) + "/" + palDir
       // prevent directory traversal
       if !strings.HasPrefix(dumpDir, dumpPrefix) {
          return fmt.Errorf("path (%s) contains no dump prefix (%s).", dumpDir, dumpPrefix)
@@ -89,7 +96,7 @@ func minDump(minName string) (err error) {
       if err != nil {
          return err
       }
-      err = dumpPillars(pillars, levelFrames, dumpDir)
+      err = dumpSquares(squares, pillars, levelFrames, dumpDir)
       if err != nil {
          return err
       }
@@ -99,12 +106,12 @@ func minDump(minName string) (err error) {
 
 // dumpPillars stores each pillar as a new png image, using the frames from a
 // CEL image level file.
-func dumpPillars(pillars []min.Pillar, levelFrames []image.Image, dumpDir string) (err error) {
-   for pillarNum, pillar := range pillars {
-      pillarPath := dumpDir + fmt.Sprintf("pillar_%04d.png", pillarNum)
+func dumpSquares(squares []til.Square, pillars []min.Pillar, levelFrames []image.Image, dumpDir string) (err error) {
+   for squareNum, square := range squares {
+      squarePath := dumpDir + fmt.Sprintf("square_%04d.png", squareNum)
       bar.UpdateInc()
-      img := pillar.Image(levelFrames)
-      err = pngutil.WriteFile(pillarPath, img)
+      img := square.Image(pillars, levelFrames)
+      err = pngutil.WriteFile(squarePath, img)
       if err != nil {
          return err
       }
