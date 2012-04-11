@@ -39,7 +39,7 @@ func usage() {
 
 func main() {
    for _, minName := range flag.Args() {
-      err := dump(minName)
+      err := minDump(minName)
       if err != nil {
          log.Fatalln(err)
       }
@@ -52,9 +52,9 @@ var bar *progressbar.Bar
 // dumpPrefix is the name of the dump directory.
 const dumpPrefix = "_dump_/"
 
-// dump creates a dump directory and dumps the MIN file's pillars using the
+// minDump creates a dump directory and dumps the MIN file's pillars using the
 // frames from a CEL image level file, once for each image config (pal).
-func dump(minName string) (err error) {
+func minDump(minName string) (err error) {
    pillars, err := min.Parse(minName)
    if err != nil {
       return err
@@ -80,7 +80,7 @@ func dump(minName string) (err error) {
       if err != nil {
          return err
       }
-      dumpDir := path.Clean(dumpPrefix+"pillars/"+nameWithoutExt) + "/" + palDir
+      dumpDir := path.Clean(dumpPrefix+"_pillars_/"+nameWithoutExt) + "/" + palDir
       // prevent directory traversal
       if !strings.HasPrefix(dumpDir, dumpPrefix) {
          return fmt.Errorf("path (%s) contains no dump prefix (%s).", dumpDir, dumpPrefix)
@@ -103,7 +103,7 @@ func dumpPillars(levelFrames []image.Image, pillars []min.Pillar, dumpDir string
    for pillarNum, pillar := range pillars {
       pillarPath := dumpDir + fmt.Sprintf("pillar_%04d.png", pillarNum)
       bar.UpdateInc()
-      img := min.PillarImage(levelFrames, pillar)
+      img := pillar.Image(levelFrames)
       err = pngutil.WriteFile(pillarPath, img)
       if err != nil {
          return err

@@ -45,18 +45,18 @@ type Block struct {
 
 // Parse parses a given MIN file and returns a slice of pillars, based on the
 // MIN format described above.
-func Parse(name string) (pillars []Pillar, err error) {
-   path, err := mpq.GetPath(name)
+func Parse(minName string) (pillars []Pillar, err error) {
+   minPath, err := mpq.GetPath(minName)
    if err != nil {
       return nil, err
    }
-   fr, err := os.Open(path)
+   fr, err := os.Open(minPath)
    if err != nil {
       return nil, err
    }
    defer fr.Close()
    var blockCount int
-   switch name {
+   switch minName {
    case "l1.min", "l2.min", "l3.min":
       blockCount = 10
    case "l4.min", "town.min":

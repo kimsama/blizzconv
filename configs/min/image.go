@@ -9,22 +9,33 @@ const (
    BlockHeight = 32
 )
 
-// PillarImage returns an image constructed from the pillar's blocks.
-//
-// ref: BlockRect (block arrangement illustration)
-func PillarImage(levelFrames []image.Image, pillar Pillar) (img image.Image) {
+// PillarWidth is the width of a pillar in pixels.
+const PillarWidth = BlockWidth * 2
+
+// Width returns the width of the pillar in pixels.
+func (pillar Pillar) Width() int {
    // the pillar is two blocks in width.
-   width := BlockWidth * 2
+   return PillarWidth
+}
+
+// Height returns the height of the pillar in pixels.
+func (pillar Pillar) Height() int {
    // the pillar is five (for l1.min, l2.min and l3.min) or eight (for l4.min
    // and town.min) blocks in height.
-   height := BlockHeight * len(pillar.Blocks) / 2
-   dst := image.NewRGBA(image.Rect(0, 0, width, height))
+   return BlockHeight * len(pillar.Blocks) / 2
+}
+
+// Image returns an image constructed from the pillar's blocks.
+//
+// ref: BlockRect (block arrangement illustration)
+func (pillar Pillar) Image(levelFrames []image.Image) (img image.Image) {
+   dst := image.NewRGBA(image.Rect(0, 0, pillar.Width(), pillar.Height()))
    // draw blocks on the left side of the pillar.
    blockNumStartLeft := len(pillar.Blocks) - 2
-   drawSide(dst, levelFrames, pillar, blockNumStartLeft)
+   pillar.drawSide(dst, levelFrames, blockNumStartLeft)
    // draw blocks on the right side of the pillar.
    blockNumStartRight := len(pillar.Blocks) - 1
-   drawSide(dst, levelFrames, pillar, blockNumStartRight)
+   pillar.drawSide(dst, levelFrames, blockNumStartRight)
    return dst
 }
 
@@ -52,28 +63,28 @@ func PillarImage(levelFrames []image.Image, pillar Pillar) (img image.Image) {
 //    +----+----+
 var BlockRect = map[int]image.Rectangle{
    // even blockNum
-   0:  image.Rect(0, 32*0, 32, 32*1),
-   2:  image.Rect(0, 32*1, 32, 32*2),
-   4:  image.Rect(0, 32*2, 32, 32*3),
-   6:  image.Rect(0, 32*3, 32, 32*4),
-   8:  image.Rect(0, 32*4, 32, 32*5),
-   10: image.Rect(0, 32*5, 32, 32*6),
-   12: image.Rect(0, 32*6, 32, 32*7),
-   14: image.Rect(0, 32*7, 32, 32*8),
+   0:  image.Rect(0, BlockHeight*0, BlockWidth, BlockHeight*1),
+   2:  image.Rect(0, BlockHeight*1, BlockWidth, BlockHeight*2),
+   4:  image.Rect(0, BlockHeight*2, BlockWidth, BlockHeight*3),
+   6:  image.Rect(0, BlockHeight*3, BlockWidth, BlockHeight*4),
+   8:  image.Rect(0, BlockHeight*4, BlockWidth, BlockHeight*5),
+   10: image.Rect(0, BlockHeight*5, BlockWidth, BlockHeight*6),
+   12: image.Rect(0, BlockHeight*6, BlockWidth, BlockHeight*7),
+   14: image.Rect(0, BlockHeight*7, BlockWidth, BlockHeight*8),
    // odd blockNum
-   1:  image.Rect(32, 32*0, 64, 32*1),
-   3:  image.Rect(32, 32*1, 64, 32*2),
-   5:  image.Rect(32, 32*2, 64, 32*3),
-   7:  image.Rect(32, 32*3, 64, 32*4),
-   9:  image.Rect(32, 32*4, 64, 32*5),
-   11: image.Rect(32, 32*5, 64, 32*6),
-   13: image.Rect(32, 32*6, 64, 32*7),
-   15: image.Rect(32, 32*7, 64, 32*8),
+   1:  image.Rect(BlockWidth, BlockHeight*0, BlockWidth*2, BlockHeight*1),
+   3:  image.Rect(BlockWidth, BlockHeight*1, BlockWidth*2, BlockHeight*2),
+   5:  image.Rect(BlockWidth, BlockHeight*2, BlockWidth*2, BlockHeight*3),
+   7:  image.Rect(BlockWidth, BlockHeight*3, BlockWidth*2, BlockHeight*4),
+   9:  image.Rect(BlockWidth, BlockHeight*4, BlockWidth*2, BlockHeight*5),
+   11: image.Rect(BlockWidth, BlockHeight*5, BlockWidth*2, BlockHeight*6),
+   13: image.Rect(BlockWidth, BlockHeight*6, BlockWidth*2, BlockHeight*7),
+   15: image.Rect(BlockWidth, BlockHeight*7, BlockWidth*2, BlockHeight*8),
 }
 
 // drawSide draws each block on one side of the pillar, starting from the bottom
 // and going to top.
-func drawSide(dst draw.Image, levelFrames []image.Image, pillar Pillar, blockNumStart int) {
+func (pillar Pillar) drawSide(dst draw.Image, levelFrames []image.Image, blockNumStart int) {
    var moveUp, first bool
    first = true
    for blockNum := blockNumStart; blockNum >= 0; blockNum -= 2 {
