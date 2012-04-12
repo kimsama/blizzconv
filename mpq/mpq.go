@@ -1,9 +1,9 @@
 // Package mpq provides access to an extracted MPQ archive.
 package mpq
 
-import ini "github.com/glacjay/goini"
-
 import "fmt"
+
+import ini "github.com/glacjay/goini"
 
 var dict ini.Dict
 

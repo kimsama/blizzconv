@@ -1,10 +1,10 @@
 package cel
 
-import "github.com/mewkiz/blizzconv/mpq"
-
 import "fmt"
 import "image/color"
 import "io/ioutil"
+
+import "github.com/mewkiz/blizzconv/mpq"
 
 // GetPal returns a color.Palette created from relPalPath. Below is a
 // description of the PAL format.

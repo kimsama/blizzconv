@@ -16,11 +16,11 @@
 // ref: Image (pillar arrangement illustration)
 package til
 
-import "github.com/mewkiz/blizzconv/mpq"
-
 import "encoding/binary"
 import "io"
 import "os"
+
+import "github.com/mewkiz/blizzconv/mpq"
 
 // Square is constructed of four pillars (top, right, left and bottom).
 //

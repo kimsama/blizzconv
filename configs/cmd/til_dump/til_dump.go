@@ -1,13 +1,5 @@
 package main
 
-import "github.com/0xC3/progress/barcli"
-import "github.com/mewkiz/blizzconv/configs/min"
-import "github.com/mewkiz/blizzconv/configs/til"
-import "github.com/mewkiz/blizzconv/images/cel"
-import "github.com/mewkiz/blizzconv/images/imgconf"
-import "github.com/mewkiz/blizzconv/mpq"
-import "github.com/mewkiz/pkg/pngutil"
-
 import dbg "fmt"
 import "flag"
 import "fmt"
@@ -16,6 +8,14 @@ import "log"
 import "os"
 import "path"
 import "strings"
+
+import "github.com/0xC3/progress/barcli"
+import "github.com/mewkiz/blizzconv/configs/min"
+import "github.com/mewkiz/blizzconv/configs/til"
+import "github.com/mewkiz/blizzconv/images/cel"
+import "github.com/mewkiz/blizzconv/images/imgconf"
+import "github.com/mewkiz/blizzconv/mpq"
+import "github.com/mewkiz/pkg/pngutil"
 
 func init() {
    flag.Usage = usage

@@ -1,14 +1,14 @@
 package main
 
-import "github.com/mewkiz/blizzconv/images/imgarchive"
-import "github.com/mewkiz/blizzconv/images/imgconf"
-import "github.com/mewkiz/blizzconv/mpq"
-
 import "flag"
 import "fmt"
 import "log"
 import "os"
 import "path"
+
+import "github.com/mewkiz/blizzconv/images/imgarchive"
+import "github.com/mewkiz/blizzconv/images/imgconf"
+import "github.com/mewkiz/blizzconv/mpq"
 
 func init() {
    flag.Usage = usage

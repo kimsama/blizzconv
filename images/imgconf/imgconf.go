@@ -5,12 +5,12 @@
 // image format contains the relevant image information.
 package imgconf
 
-import ini "github.com/glacjay/goini"
-
 import "fmt"
 import "sort"
 import "strconv"
 import "strings"
+
+import ini "github.com/glacjay/goini"
 
 // IniPath is the path to the 'cel.ini' or 'cl2.ini' file which provides CEL and
 // CL2 image information.

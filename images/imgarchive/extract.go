@@ -1,13 +1,13 @@
 // Package imgarchive implements support for extracting CEL and CL2 archives.
 package imgarchive
 
-import "github.com/mewkiz/blizzconv/images/imgconf"
-import "github.com/mewkiz/blizzconv/mpq"
-
 import "fmt"
 import "os"
 import "path"
 import "strings"
+
+import "github.com/mewkiz/blizzconv/images/imgconf"
+import "github.com/mewkiz/blizzconv/mpq"
 
 // Extract extracts CEL and CL2 archives.
 func Extract(archiveName string) (err error) {
