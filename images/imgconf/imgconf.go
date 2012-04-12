@@ -29,6 +29,10 @@ func Init() (err error) {
 
 // Len returns the number of images in the ini file.
 func Len() int {
+   _, ok := dict[""]
+   if ok {
+      return len(dict) - 1
+   }
    return len(dict)
 }
 

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/0xC3/progressbar"
+import "github.com/0xC3/progress/barcli"
 import "github.com/mewkiz/blizzconv/images/cel"
 ///import "github.com/mewkiz/blizzconv/images/cl2"
 import "github.com/mewkiz/blizzconv/images/imgarchive"
@@ -36,7 +36,7 @@ func usage() {
 }
 
 // bar represents the progress bar.
-var bar *progressbar.Bar
+var bar *barcli.Bar
 
 func main() {
    if flag.NArg() > 0 {
@@ -49,7 +49,7 @@ func main() {
       log.Fatalln(err)
    }
    if flagAll {
-      bar, err = progressbar.New(imgconf.Len())
+      bar, err = barcli.New(imgconf.Len())
       if err != nil {
          log.Fatalln(err)
       }
@@ -76,7 +76,7 @@ func main() {
 // and dumps the image's frames, once for each image config.
 func dump(imgName string) (err error) {
    if flagAll {
-      bar.UpdateInc()
+      bar.Inc()
    }
    _, found := imgconf.GetImageCount(imgName)
    if found {
