@@ -39,6 +39,10 @@ func usage() {
 }
 
 func main() {
+   if flag.NArg() < 1 {
+      flag.Usage()
+      os.Exit(1)
+   }
    for _, tilName := range flag.Args() {
       err := tilDump(tilName)
       if err != nil {

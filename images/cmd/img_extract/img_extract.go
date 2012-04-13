@@ -28,6 +28,10 @@ func usage() {
 }
 
 func main() {
+   if flag.NArg() < 1 {
+      flag.Usage()
+      os.Exit(1)
+   }
    if flag.NArg() > 0 {
       if path.Ext(flag.Arg(0)) == ".cl2" {
          imgconf.IniPath = "cl2.ini"
