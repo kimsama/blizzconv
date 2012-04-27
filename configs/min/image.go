@@ -90,17 +90,23 @@ func (pillar Pillar) drawSide(dst draw.Image, levelFrames []image.Image, blockNu
    for blockNum := blockNumStart; blockNum >= 0; blockNum -= 2 {
       block := pillar.Blocks[blockNum]
       if block.IsValid {
-         if first {
-            switch block.Type {
-            // if the first block in a section is type 1, 4 or 5 the entire
-            // section of blocks should move up.
-            case 1, 4, 5:
-               moveUp = true
-            default:
-               moveUp = false
+         switch block.Type {
+         case 4, 5:
+            // if a block in a section is type 4 or 5 the block and all blocks
+            // above it, in the same section, should move up.
+            moveUp = true
+         default:
+            if first {
+               if block.Type == 1 {
+                  // if the first block in a section is type 1 the entire
+                  // section of blocks should move up.
+                  moveUp = true
+               } else {
+                  moveUp = false
+               }
             }
-            first = false
          }
+         first = false
          rect := BlockRect[blockNum]
          if moveUp {
             rect.Min.Y--

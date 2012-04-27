@@ -6,7 +6,6 @@ import "fmt"
 import "log"
 import "os"
 import "path"
-import "runtime/pprof"
 import "strings"
 
 import "github.com/mewkiz/blizzconv/configs/dun"
@@ -47,19 +46,12 @@ func usage() {
 }
 
 func main() {
-   f, err := os.Create("dun_dump.prof")
-   if err != nil {
-      log.Fatalln(err)
-   }
-   pprof.StartCPUProfile(f)
-   //defer pprof.StopCPUProfile()
    if flagAll {
       // dump all dungeons in the ini file.
       err := dunconf.AllFunc(dungeonDump)
       if err != nil {
          log.Fatalln(err)
       }
-      pprof.StopCPUProfile()
       return
    }
    if flag.NArg() < 1 {
