@@ -8,8 +8,4 @@ Supported formats
 -----------------
 
  * cel
-
-Not yet supported formats
--------------------------
-
  * cl2
