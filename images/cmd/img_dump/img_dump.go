@@ -9,6 +9,7 @@ import "strings"
 
 import "github.com/0xC3/progress/barcli"
 import "github.com/mewkiz/blizzconv/images/cel"
+import "github.com/mewkiz/blizzconv/images/cl2"
 import "github.com/mewkiz/blizzconv/images/imgarchive"
 import "github.com/mewkiz/blizzconv/images/imgconf"
 import "github.com/mewkiz/blizzconv/mpq"
@@ -19,7 +20,7 @@ var flagAll bool
 func init() {
    flag.Usage = usage
    flag.BoolVar(&flagAll, "a", false, "Dump all image files.")
-   flag.StringVar(&imgconf.IniPath, "celini", "cel.ini", "Path to an ini file containing image information.")
+   flag.StringVar(&imgconf.IniPath, "imgini", "cel.ini", "Path to an ini file containing image information.")
    flag.StringVar(&mpq.ExtractPath, "mpqdump", "mpqdump/", "Path to an extracted MPQ file.")
    flag.StringVar(&mpq.IniPath, "mpqini", "mpq.ini", "Path to an ini file containing relative path information.")
    flag.Parse()
@@ -39,7 +40,7 @@ var bar *barcli.Bar
 
 func main() {
    if flag.NArg() > 0 {
-      if path.Ext(flag.Arg(0)) == ".cl2" {
+      if path.Ext(flag.Arg(0)) == ".cl2" && imgconf.IniPath == "cel.ini" {
          imgconf.IniPath = "cl2.ini"
       }
    }
@@ -88,10 +89,6 @@ func dump(imgName string) (err error) {
    }
    relPalPaths := imgconf.GetRelPalPaths(imgName)
    for _, relPalPath := range relPalPaths {
-      /// ### todo ###
-      ///   - add support for cl2
-      ///   - maybe this should be handled with a wrapper library?
-      /// ############
       conf, err := cel.GetConf(imgName, relPalPath)
       if err != nil {
          return err
@@ -113,7 +110,7 @@ func dump(imgName string) (err error) {
 // creates a dump directory and stores each frame as a new png image.
 func dumpFrames(conf *cel.Config, palDir, imgName string) (err error) {
    // decode frames using the given image config (pal)
-   imgs, err := cel.DecodeAll(imgName, conf)
+   imgs, err := cl2.DecodeAll(imgName, conf)
    if err != nil {
       return err
    }

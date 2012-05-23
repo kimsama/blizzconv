@@ -126,7 +126,7 @@ func isType3or5(frame []byte) bool {
 // Type1 is the most common type for CEL images.
 func DecodeFrameType1(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
    rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := getPixelSetter(width, height)
+   setPixel := GetPixelSetter(width, height)
    pos := 0
    for pos < len(frame) {
       chunkSize := int(int8(frame[pos]))
@@ -147,10 +147,10 @@ func DecodeFrameType1(frame []byte, width int, height int, pal color.Palette) (i
    return rgba
 }
 
-// getPixelSetter returns a function that can be invoced to incrementally set
+// GetPixelSetter returns a function that can be invoced to incrementally set
 // pixels, starting in the lower left corner, going from left to right, and then
 // row by row from the bottom to the top of the image.
-func getPixelSetter(width, height int) func(*image.RGBA, color.Color) {
+func GetPixelSetter(width, height int) func(*image.RGBA, color.Color) {
    var x, y int
    y = height - 1
    setPixel := func(rgba *image.RGBA, c color.Color) {

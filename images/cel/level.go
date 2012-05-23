@@ -14,7 +14,7 @@ import "image/color"
 // Type0 corresponds to a plain 32x32 images, with no transparency.
 func DecodeFrameType0(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
    rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := getPixelSetter(width, height)
+   setPixel := GetPixelSetter(width, height)
    for _, b := range frame {
       setPixel(rgba, pal[b])
    }
@@ -72,7 +72,7 @@ func DecodeFrameType0(frame []byte, width int, height int, pal color.Palette) (i
 //    +--------------------------------+
 func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
    rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := getPixelSetter(width, height)
+   setPixel := GetPixelSetter(width, height)
    decodeCounts := []int{0, 4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 28, 28, 24, 24, 20, 20, 16, 16, 12, 12, 8, 8, 4, 4}
    for lineNum, decodeCount := range decodeCounts {
       var zeroCount int
@@ -137,7 +137,7 @@ func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) (i
 //    +--------------------------------+
 func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
    rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := getPixelSetter(width, height)
+   setPixel := GetPixelSetter(width, height)
    decodeCounts := []int{0, 4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 28, 28, 24, 24, 20, 20, 16, 16, 12, 12, 8, 8, 4, 4}
    for lineNum, decodeCount := range decodeCounts {
       var zeroCount int
@@ -202,7 +202,7 @@ func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) (i
 //    +--------------------------------+
 func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
    rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := getPixelSetter(width, height)
+   setPixel := GetPixelSetter(width, height)
    decodeCounts := []int{4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32}
    for lineNum, decodeCount := range decodeCounts {
       var zeroCount int
@@ -267,7 +267,7 @@ func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) (i
 //    +--------------------------------+
 func DecodeFrameType5(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
    rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := getPixelSetter(width, height)
+   setPixel := GetPixelSetter(width, height)
    decodeCounts := []int{4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32}
    for lineNum, decodeCount := range decodeCounts {
       var zeroCount int
