@@ -40,34 +40,34 @@ import "github.com/mewkiz/blizzconv/images/cel"
 //
 // Type6 is the only type for CL2 images.
 func DecodeFrameType6(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-   rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := cel.GetPixelSetter(width, height)
-   pos := 0
-   for pos < len(frame) {
-      chunkSize := int(int8(frame[pos]))
-      pos++
-      if chunkSize >= 0 {
-         // transparent pixels
-         for i := 0; i < chunkSize; i++ {
-            setPixel(rgba, color.RGBA{})
-         }
-      } else {
-         chunkSize = -chunkSize
-         if chunkSize <= 65 {
-            // regular pixels
-            for i := 0; i < chunkSize; i++ {
-               setPixel(rgba, pal[frame[pos]])
-               pos++
-            }
-         } else {
-            chunkSize -= 65
-            // RLE encoded pixels
-            for i := 0; i < chunkSize; i++ {
-               setPixel(rgba, pal[frame[pos]])
-            }
-            pos++
-         }
-      }
-   }
-   return rgba
+	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+	setPixel := cel.GetPixelSetter(width, height)
+	pos := 0
+	for pos < len(frame) {
+		chunkSize := int(int8(frame[pos]))
+		pos++
+		if chunkSize >= 0 {
+			// transparent pixels
+			for i := 0; i < chunkSize; i++ {
+				setPixel(rgba, color.RGBA{})
+			}
+		} else {
+			chunkSize = -chunkSize
+			if chunkSize <= 65 {
+				// regular pixels
+				for i := 0; i < chunkSize; i++ {
+					setPixel(rgba, pal[frame[pos]])
+					pos++
+				}
+			} else {
+				chunkSize -= 65
+				// RLE encoded pixels
+				for i := 0; i < chunkSize; i++ {
+					setPixel(rgba, pal[frame[pos]])
+				}
+				pos++
+			}
+		}
+	}
+	return rgba
 }

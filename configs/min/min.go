@@ -32,56 +32,56 @@ import "github.com/mewkiz/blizzconv/mpq"
 //
 // ref: BlockRect (block arrangement illustration)
 type Pillar struct {
-   Blocks []Block
+	Blocks []Block
 }
 
 // Block contains information about which CEL decode algorithm (Type) that
 // should be used to decode a specific FrameNum in a CEL image level file.
 type Block struct {
-   IsValid  bool
-   FrameNum int
-   Type     int
+	IsValid  bool
+	FrameNum int
+	Type     int
 }
 
 // Parse parses a given MIN file and returns a slice of pillars, based on the
 // MIN format described above.
 func Parse(minName string) (pillars []Pillar, err error) {
-   minPath, err := mpq.GetPath(minName)
-   if err != nil {
-      return nil, err
-   }
-   fr, err := os.Open(minPath)
-   if err != nil {
-      return nil, err
-   }
-   defer fr.Close()
-   var blockCount int
-   switch minName {
-   case "l1.min", "l2.min", "l3.min":
-      blockCount = 10
-   case "l4.min", "town.min":
-      blockCount = 16
-   }
-   tmp := make([]uint16, blockCount)
-   for {
-      err = binary.Read(fr, binary.LittleEndian, &tmp)
-      if err != nil {
-         if err == io.EOF {
-            break
-         }
-         return nil, err
-      }
-      pillar := Pillar{}
-      pillar.Blocks = make([]Block, blockCount)
-      for i := 0; i < blockCount; i++ {
-         frameNumPlus1 := int(tmp[i] & 0x0FFF)
-         if frameNumPlus1 != 0 {
-            pillar.Blocks[i].IsValid = true
-            pillar.Blocks[i].FrameNum = frameNumPlus1 - 1
-         }
-         pillar.Blocks[i].Type = int(tmp[i]&0x7000) >> 12
-      }
-      pillars = append(pillars, pillar)
-   }
-   return pillars, nil
+	minPath, err := mpq.GetPath(minName)
+	if err != nil {
+		return nil, err
+	}
+	fr, err := os.Open(minPath)
+	if err != nil {
+		return nil, err
+	}
+	defer fr.Close()
+	var blockCount int
+	switch minName {
+	case "l1.min", "l2.min", "l3.min":
+		blockCount = 10
+	case "l4.min", "town.min":
+		blockCount = 16
+	}
+	tmp := make([]uint16, blockCount)
+	for {
+		err = binary.Read(fr, binary.LittleEndian, &tmp)
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			return nil, err
+		}
+		pillar := Pillar{}
+		pillar.Blocks = make([]Block, blockCount)
+		for i := 0; i < blockCount; i++ {
+			frameNumPlus1 := int(tmp[i] & 0x0FFF)
+			if frameNumPlus1 != 0 {
+				pillar.Blocks[i].IsValid = true
+				pillar.Blocks[i].FrameNum = frameNumPlus1 - 1
+			}
+			pillar.Blocks[i].Type = int(tmp[i]&0x7000) >> 12
+		}
+		pillars = append(pillars, pillar)
+	}
+	return pillars, nil
 }

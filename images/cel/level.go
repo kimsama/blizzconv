@@ -13,12 +13,12 @@ import "image/color"
 //
 // Type0 corresponds to a plain 32x32 images, with no transparency.
 func DecodeFrameType0(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-   rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := GetPixelSetter(width, height)
-   for _, b := range frame {
-      setPixel(rgba, pal[b])
-   }
-   return rgba
+	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+	setPixel := GetPixelSetter(width, height)
+	for _, b := range frame {
+		setPixel(rgba, pal[b])
+	}
+	return rgba
 }
 
 // DecodeFrameType2 returns an image after decoding the frame in the following
@@ -71,19 +71,19 @@ func DecodeFrameType0(frame []byte, width int, height int, pal color.Palette) (i
 //    |                            00xx|
 //    +--------------------------------+
 func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-   rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := GetPixelSetter(width, height)
-   decodeCounts := []int{0, 4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 28, 28, 24, 24, 20, 20, 16, 16, 12, 12, 8, 8, 4, 4}
-   for lineNum, decodeCount := range decodeCounts {
-      var zeroCount int
-      switch lineNum {
-      case 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31:
-         zeroCount = 2
-      }
-      decodeLineTransparencyLeft(rgba, setPixel, frame, zeroCount, decodeCount, pal)
-      frame = frame[decodeCount:]
-   }
-   return rgba
+	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+	setPixel := GetPixelSetter(width, height)
+	decodeCounts := []int{0, 4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 28, 28, 24, 24, 20, 20, 16, 16, 12, 12, 8, 8, 4, 4}
+	for lineNum, decodeCount := range decodeCounts {
+		var zeroCount int
+		switch lineNum {
+		case 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31:
+			zeroCount = 2
+		}
+		decodeLineTransparencyLeft(rgba, setPixel, frame, zeroCount, decodeCount, pal)
+		frame = frame[decodeCount:]
+	}
+	return rgba
 }
 
 // DecodeFrameType3 returns an image after decoding the frame in the following
@@ -136,19 +136,19 @@ func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) (i
 //    |xx00                            |
 //    +--------------------------------+
 func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-   rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := GetPixelSetter(width, height)
-   decodeCounts := []int{0, 4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 28, 28, 24, 24, 20, 20, 16, 16, 12, 12, 8, 8, 4, 4}
-   for lineNum, decodeCount := range decodeCounts {
-      var zeroCount int
-      switch lineNum {
-      case 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31:
-         zeroCount = 2
-      }
-      decodeLineTransparencyRight(rgba, setPixel, frame, zeroCount, decodeCount, pal)
-      frame = frame[decodeCount:]
-   }
-   return rgba
+	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+	setPixel := GetPixelSetter(width, height)
+	decodeCounts := []int{0, 4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 28, 28, 24, 24, 20, 20, 16, 16, 12, 12, 8, 8, 4, 4}
+	for lineNum, decodeCount := range decodeCounts {
+		var zeroCount int
+		switch lineNum {
+		case 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31:
+			zeroCount = 2
+		}
+		decodeLineTransparencyRight(rgba, setPixel, frame, zeroCount, decodeCount, pal)
+		frame = frame[decodeCount:]
+	}
+	return rgba
 }
 
 // DecodeFrameType4 returns an image after decoding the frame in the following
@@ -201,19 +201,19 @@ func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) (i
 //    |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
 //    +--------------------------------+
 func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-   rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := GetPixelSetter(width, height)
-   decodeCounts := []int{4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32}
-   for lineNum, decodeCount := range decodeCounts {
-      var zeroCount int
-      switch lineNum {
-      case 0, 2, 4, 6, 8, 10, 12, 14:
-         zeroCount = 2
-      }
-      decodeLineTransparencyLeft(rgba, setPixel, frame, zeroCount, decodeCount, pal)
-      frame = frame[decodeCount:]
-   }
-   return rgba
+	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+	setPixel := GetPixelSetter(width, height)
+	decodeCounts := []int{4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32}
+	for lineNum, decodeCount := range decodeCounts {
+		var zeroCount int
+		switch lineNum {
+		case 0, 2, 4, 6, 8, 10, 12, 14:
+			zeroCount = 2
+		}
+		decodeLineTransparencyLeft(rgba, setPixel, frame, zeroCount, decodeCount, pal)
+		frame = frame[decodeCount:]
+	}
+	return rgba
 }
 
 // DecodeFrameType5 returns an image after decoding the frame in the following
@@ -266,19 +266,19 @@ func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) (i
 //    |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
 //    +--------------------------------+
 func DecodeFrameType5(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-   rgba := image.NewRGBA(image.Rect(0, 0, width, height))
-   setPixel := GetPixelSetter(width, height)
-   decodeCounts := []int{4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32}
-   for lineNum, decodeCount := range decodeCounts {
-      var zeroCount int
-      switch lineNum {
-      case 0, 2, 4, 6, 8, 10, 12, 14:
-         zeroCount = 2
-      }
-      decodeLineTransparencyRight(rgba, setPixel, frame, zeroCount, decodeCount, pal)
-      frame = frame[decodeCount:]
-   }
-   return rgba
+	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+	setPixel := GetPixelSetter(width, height)
+	decodeCounts := []int{4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32}
+	for lineNum, decodeCount := range decodeCounts {
+		var zeroCount int
+		switch lineNum {
+		case 0, 2, 4, 6, 8, 10, 12, 14:
+			zeroCount = 2
+		}
+		decodeLineTransparencyRight(rgba, setPixel, frame, zeroCount, decodeCount, pal)
+		frame = frame[decodeCount:]
+	}
+	return rgba
 }
 
 // decodeLineTransparencyLeft decodes a line from the frame, where decodeCount
@@ -286,18 +286,18 @@ func DecodeFrameType5(frame []byte, width int, height int, pal color.Palette) (i
 // explicit transparent pixels and the rest of the line is transparent. Each
 // line is assumed to have a width of 32 pixels.
 func decodeLineTransparencyLeft(rgba *image.RGBA, setPixel func(*image.RGBA, color.Color), frame []byte, zeroCount, decodeCount int, pal color.Palette) {
-   // transparent pixels
-   for i := decodeCount; i < 32; i++ {
-      setPixel(rgba, color.RGBA{})
-   }
-   // zeroes (transparent pixels)
-   for i := 0; i < zeroCount; i++ {
-      setPixel(rgba, color.RGBA{})
-   }
-   // regular pixels
-   for i := zeroCount; i < decodeCount; i++ {
-      setPixel(rgba, pal[frame[i]])
-   }
+	// transparent pixels
+	for i := decodeCount; i < 32; i++ {
+		setPixel(rgba, color.RGBA{})
+	}
+	// zeroes (transparent pixels)
+	for i := 0; i < zeroCount; i++ {
+		setPixel(rgba, color.RGBA{})
+	}
+	// regular pixels
+	for i := zeroCount; i < decodeCount; i++ {
+		setPixel(rgba, pal[frame[i]])
+	}
 }
 
 // decodeLineTransparencyRight decodes a line from the frame, where decodeCount
@@ -305,16 +305,16 @@ func decodeLineTransparencyLeft(rgba *image.RGBA, setPixel func(*image.RGBA, col
 // explicit transparent pixels and the rest of the line is transparent. Each
 // line is assumed to have a width of 32 pixels.
 func decodeLineTransparencyRight(rgba *image.RGBA, setPixel func(*image.RGBA, color.Color), frame []byte, zeroCount, decodeCount int, pal color.Palette) {
-   // regular pixels
-   for i := 0; i < decodeCount-zeroCount; i++ {
-      setPixel(rgba, pal[frame[i]])
-   }
-   // zeroes (transparent pixels)
-   for i := 0; i < zeroCount; i++ {
-      setPixel(rgba, color.RGBA{})
-   }
-   // transparent pixels
-   for i := decodeCount; i < 32; i++ {
-      setPixel(rgba, color.RGBA{})
-   }
+	// regular pixels
+	for i := 0; i < decodeCount-zeroCount; i++ {
+		setPixel(rgba, pal[frame[i]])
+	}
+	// zeroes (transparent pixels)
+	for i := 0; i < zeroCount; i++ {
+		setPixel(rgba, color.RGBA{})
+	}
+	// transparent pixels
+	for i := decodeCount; i < 32; i++ {
+		setPixel(rgba, color.RGBA{})
+	}
 }
