@@ -14,7 +14,7 @@ import "github.com/mewkiz/blizzconv/configs/min"
 import "github.com/mewkiz/blizzconv/images/cel"
 import "github.com/mewkiz/blizzconv/images/imgconf"
 import "github.com/mewkiz/blizzconv/mpq"
-import "github.com/mewkiz/pkg/pngutil"
+import "github.com/mewkiz/pkg/imgutil"
 
 func init() {
 	flag.Usage = usage
@@ -108,7 +108,7 @@ func dumpPillars(pillars []min.Pillar, levelFrames []image.Image, dumpDir string
 		pillarPath := dumpDir + fmt.Sprintf("pillar_%04d.png", pillarNum)
 		bar.Inc()
 		img := pillar.Image(levelFrames)
-		err = pngutil.WriteFile(pillarPath, img)
+		err = imgutil.WriteFile(pillarPath, img)
 		if err != nil {
 			return err
 		}

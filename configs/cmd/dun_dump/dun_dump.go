@@ -14,7 +14,7 @@ import "github.com/mewkiz/blizzconv/configs/min"
 import "github.com/mewkiz/blizzconv/images/cel"
 import "github.com/mewkiz/blizzconv/images/imgconf"
 import "github.com/mewkiz/blizzconv/mpq"
-import "github.com/mewkiz/pkg/pngutil"
+import "github.com/mewkiz/pkg/imgutil"
 
 var flagAll bool
 
@@ -134,7 +134,7 @@ func dungeonDump(dungeonName string) (err error) {
 		}
 		dbg.Println("Creating image:", path.Base(dungeonPath))
 		img := dungeon.Image(colCount, rowCount, pillars, levelFrames)
-		err = pngutil.WriteFile(dungeonPath, img)
+		err = imgutil.WriteFile(dungeonPath, img)
 		if err != nil {
 			return err
 		}

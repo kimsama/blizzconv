@@ -13,7 +13,7 @@ import "github.com/mewkiz/blizzconv/images/cl2"
 import "github.com/mewkiz/blizzconv/images/imgarchive"
 import "github.com/mewkiz/blizzconv/images/imgconf"
 import "github.com/mewkiz/blizzconv/mpq"
-import "github.com/mewkiz/pkg/pngutil"
+import "github.com/mewkiz/pkg/imgutil"
 
 var flagAll bool
 
@@ -133,7 +133,7 @@ func dumpFrames(conf *cel.Config, palDir, imgName string) (err error) {
 		if len(imgs) > 1 {
 			pngName = fmt.Sprintf("%s_%04d.png", nameWithoutExt, frameNum)
 		}
-		err := pngutil.WriteFile(dumpDir+pngName, img)
+		err := imgutil.WriteFile(dumpDir+pngName, img)
 		if err != nil {
 			return err
 		}

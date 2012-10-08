@@ -15,7 +15,7 @@ import "github.com/mewkiz/blizzconv/configs/til"
 import "github.com/mewkiz/blizzconv/images/cel"
 import "github.com/mewkiz/blizzconv/images/imgconf"
 import "github.com/mewkiz/blizzconv/mpq"
-import "github.com/mewkiz/pkg/pngutil"
+import "github.com/mewkiz/pkg/imgutil"
 
 func init() {
 	flag.Usage = usage
@@ -115,7 +115,7 @@ func dumpSquares(squares []til.Square, pillars []min.Pillar, levelFrames []image
 		squarePath := dumpDir + fmt.Sprintf("square_%04d.png", squareNum)
 		bar.Inc()
 		img := square.Image(pillars, levelFrames)
-		err = pngutil.WriteFile(squarePath, img)
+		err = imgutil.WriteFile(squarePath, img)
 		if err != nil {
 			return err
 		}
