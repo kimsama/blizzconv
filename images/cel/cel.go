@@ -28,8 +28,8 @@ import "image"
 import "image/color"
 import "os"
 
-import "github.com/mewkiz/blizzconv/images/imgconf"
-import "github.com/mewkiz/blizzconv/mpq"
+import "github.com/mewrnd/blizzconv/images/imgconf"
+import "github.com/mewrnd/blizzconv/mpq"
 
 // Config holds an image's palette and dimensions.
 type Config struct {

@@ -3,7 +3,7 @@ package til
 import "image"
 import "image/draw"
 
-import "github.com/mewkiz/blizzconv/configs/min"
+import "github.com/mewrnd/blizzconv/configs/min"
 
 // Image returns an image constructed from the square's pillars. The pillars are
 // arranged as illustrated below, forming a square:

@@ -8,7 +8,7 @@ package cl2
 import "image"
 import "path"
 
-import "github.com/mewkiz/blizzconv/images/cel"
+import "github.com/mewrnd/blizzconv/images/cel"
 
 // DecodeAll returns the sequential frames of a CEL image based on a given conf.
 func DecodeAll(imgName string, conf *cel.Config) (imgs []image.Image, err error) {

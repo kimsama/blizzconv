@@ -6,8 +6,8 @@ import "os"
 import "path"
 import "strings"
 
-import "github.com/mewkiz/blizzconv/images/imgconf"
-import "github.com/mewkiz/blizzconv/mpq"
+import "github.com/mewrnd/blizzconv/images/imgconf"
+import "github.com/mewrnd/blizzconv/mpq"
 
 // Extract extracts CEL and CL2 archives.
 func Extract(archiveName string) (err error) {

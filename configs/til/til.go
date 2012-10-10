@@ -20,7 +20,7 @@ import "encoding/binary"
 import "io"
 import "os"
 
-import "github.com/mewkiz/blizzconv/mpq"
+import "github.com/mewrnd/blizzconv/mpq"
 
 // Square is constructed of four pillars (top, right, left and bottom).
 //

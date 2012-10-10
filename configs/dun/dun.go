@@ -15,9 +15,9 @@ import "fmt"
 import "os"
 import "path"
 
-import "github.com/mewkiz/blizzconv/configs/dunconf"
-import "github.com/mewkiz/blizzconv/configs/til"
-import "github.com/mewkiz/blizzconv/mpq"
+import "github.com/mewrnd/blizzconv/configs/dunconf"
+import "github.com/mewrnd/blizzconv/configs/til"
+import "github.com/mewrnd/blizzconv/mpq"
 
 // The maximum number of cols and rows in a dungeon map.
 const (

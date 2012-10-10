@@ -6,9 +6,9 @@ import "log"
 import "os"
 import "path"
 
-import "github.com/mewkiz/blizzconv/images/imgarchive"
-import "github.com/mewkiz/blizzconv/images/imgconf"
-import "github.com/mewkiz/blizzconv/mpq"
+import "github.com/mewrnd/blizzconv/images/imgarchive"
+import "github.com/mewrnd/blizzconv/images/imgconf"
+import "github.com/mewrnd/blizzconv/mpq"
 
 func init() {
 	flag.Usage = usage

@@ -25,7 +25,7 @@ import "encoding/binary"
 import "io"
 import "os"
 
-import "github.com/mewkiz/blizzconv/mpq"
+import "github.com/mewrnd/blizzconv/mpq"
 
 // Pillar contains 10 to 16 blocks, each corresponding to a frame in a CEL image
 // level files.

@@ -3,7 +3,7 @@ package dun
 import "image"
 import "image/draw"
 
-import "github.com/mewkiz/blizzconv/configs/min"
+import "github.com/mewrnd/blizzconv/configs/min"
 
 // Image returns an image constructed from the pillars associated with each
 // coordinate of the dungeon map.
