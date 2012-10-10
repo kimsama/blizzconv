@@ -8,13 +8,13 @@ import "os"
 import "path"
 import "strings"
 
+import "github.com/mewkiz/pkg/imgutil"
 import "github.com/mewrnd/blizzconv/configs/dun"
 import "github.com/mewrnd/blizzconv/configs/dunconf"
 import "github.com/mewrnd/blizzconv/configs/min"
 import "github.com/mewrnd/blizzconv/images/cel"
 import "github.com/mewrnd/blizzconv/images/imgconf"
 import "github.com/mewrnd/blizzconv/mpq"
-import "github.com/mewrnd/pkg/imgutil"
 
 var flagAll bool
 
