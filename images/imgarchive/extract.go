@@ -13,7 +13,7 @@ import "github.com/mewrnd/blizzconv/mpq"
 func Extract(archiveName string) (err error) {
 	imageCount, found := imgconf.GetImageCount(archiveName)
 	if !found {
-		return fmt.Errorf("no archived images in '%s'.", archiveName)
+		return fmt.Errorf("no archived images in %q.", archiveName)
 	}
 	archivePath, err := mpq.GetPath(archiveName)
 	if err != nil {
@@ -32,11 +32,16 @@ func Extract(archiveName string) (err error) {
 	ext := path.Ext(archiveName)
 	switch ext {
 	case ".cel":
-		return ExtractCel(fr, fws)
+		err = ExtractCel(fr, fws)
 	case ".cl2":
-		return ExtractCl2(fr, fws)
+		err = ExtractCl2(fr, fws)
+	default:
+		return fmt.Errorf("imgarchive.Extract: unknown extension: %q.", ext)
 	}
-	return fmt.Errorf("unknown extension: '%s'.", ext)
+	if err != nil {
+		return fmt.Errorf("imgarchive.Extract: error while extracting %q: %s.", archiveName, err)
+	}
+	return nil
 }
 
 // createOutputImages creates the output images of the archive. Note: remember
@@ -44,7 +49,7 @@ func Extract(archiveName string) (err error) {
 func createOutputImages(archivePath string, imageCount int) (fws []*os.File, err error) {
 	posExt := strings.LastIndex(archivePath, ".")
 	if posExt == -1 {
-		return nil, fmt.Errorf("no extensions located for '%s'.", path.Base(archivePath))
+		return nil, fmt.Errorf("no extensions located for %q.", path.Base(archivePath))
 	}
 	for imageNum := 0; imageNum < imageCount; imageNum++ {
 		imgPath := fmt.Sprintf("%s%d%s", archivePath[:posExt], imageNum, archivePath[posExt:])

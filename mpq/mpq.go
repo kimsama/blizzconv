@@ -37,7 +37,7 @@ func GetPath(name string) (path string, err error) {
 func GetRelPath(name string) (relPath string, err error) {
 	relPath, found := dict.GetString(name, "path")
 	if !found {
-		return "", fmt.Errorf("path not found for '%s'.", name)
+		return "", fmt.Errorf("path not found for %q.", name)
 	}
 	return relPath, nil
 }

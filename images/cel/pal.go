@@ -23,7 +23,7 @@ func GetPal(relPalPath string) (pal color.Palette, err error) {
 		return nil, err
 	}
 	if len(buf) != 256*3 {
-		return nil, fmt.Errorf("invalid pal size (%d) for '%s'.", len(buf), relPalPath)
+		return nil, fmt.Errorf("invalid pal size (%d) for %q.", len(buf), relPalPath)
 	}
 	pal = make(color.Palette, 256)
 	for i := range pal {

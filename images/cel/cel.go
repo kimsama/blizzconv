@@ -24,6 +24,7 @@
 package cel
 
 import "encoding/binary"
+import "fmt"
 import "image"
 import "image/color"
 import "os"
@@ -77,12 +78,12 @@ func GetFrames(celName string) (frames [][]byte, err error) {
 	var frameCount uint32
 	err = binary.Read(fr, binary.LittleEndian, &frameCount)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("cel.GetFrames: error while reading frame count for %q: %s.", celName, err)
 	}
 	frameOffsets := make([]uint32, frameCount+1)
 	err = binary.Read(fr, binary.LittleEndian, frameOffsets)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("cel.GetFrames: error while reading frame offsets for %q: %s.", celName, err)
 	}
 	for frameNum := uint32(0); frameNum < frameCount; frameNum++ {
 		headerSize := imgconf.GetHeaderSize(celName)
@@ -92,7 +93,7 @@ func GetFrames(celName string) (frames [][]byte, err error) {
 		frame := make([]byte, frameSize)
 		_, err := fr.ReadAt(frame, frameStart)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("cel.GetFrames: error while reading frame content for %q: %s.", celName, err)
 		}
 		frames = append(frames, frame)
 	}

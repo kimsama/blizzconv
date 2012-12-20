@@ -60,7 +60,7 @@ func AllFunc(f func(string) error) (err error) {
 func GetWidth(imgName string) (width int, err error) {
 	width, found := dict.GetInt(imgName, "width")
 	if !found {
-		return 0, fmt.Errorf("width not found for '%s'.", imgName)
+		return 0, fmt.Errorf("width not found for %q.", imgName)
 	}
 	return width, nil
 }
@@ -69,7 +69,7 @@ func GetWidth(imgName string) (width int, err error) {
 func GetHeight(imgName string) (height int, err error) {
 	height, found := dict.GetInt(imgName, "height")
 	if !found {
-		return 0, fmt.Errorf("height not found for '%s'.", imgName)
+		return 0, fmt.Errorf("height not found for %q.", imgName)
 	}
 	return height, nil
 }
@@ -137,7 +137,7 @@ func getFrameDimension(rawFramesDimensions string) (frameDimension map[int]int, 
 		rawFramesDimension = strings.TrimSpace(rawFramesDimension)
 		posDelim := strings.LastIndex(rawFramesDimension, ":")
 		if posDelim == -1 {
-			return nil, fmt.Errorf("no delim ':' found for '%s'.", rawFramesDimension)
+			return nil, fmt.Errorf("no delim ':' found for %q.", rawFramesDimension)
 		}
 		rawFrameNums := rawFramesDimension[:posDelim]
 		rawDimension := rawFramesDimension[posDelim+1:]

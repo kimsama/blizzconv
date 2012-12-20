@@ -48,7 +48,7 @@ func AllFunc(f func(string) error) (err error) {
 func GetColStart(dunName string) (colStart int, err error) {
 	colStart, found := dict.GetInt(dunName, "col_start")
 	if !found {
-		return 0, fmt.Errorf("col_start not found for '%s'.", dunName)
+		return 0, fmt.Errorf("col_start not found for %q.", dunName)
 	}
 	return colStart, nil
 }
@@ -57,7 +57,7 @@ func GetColStart(dunName string) (colStart int, err error) {
 func GetRowStart(dunName string) (rowStart int, err error) {
 	rowStart, found := dict.GetInt(dunName, "row_start")
 	if !found {
-		return 0, fmt.Errorf("row_start not found for '%s'.", dunName)
+		return 0, fmt.Errorf("row_start not found for %q.", dunName)
 	}
 	return rowStart, nil
 }
@@ -66,7 +66,7 @@ func GetRowStart(dunName string) (rowStart int, err error) {
 func GetDunNames(dungeonName string) (dunNames []string, err error) {
 	rawDunNames, found := dict.GetString(dungeonName, "duns")
 	if !found {
-		return nil, fmt.Errorf("duns not found for '%s'.", dungeonName)
+		return nil, fmt.Errorf("duns not found for %q.", dungeonName)
 	}
 	return strings.Split(rawDunNames, ","), nil
 }
@@ -75,7 +75,7 @@ func GetDunNames(dungeonName string) (dunNames []string, err error) {
 func GetColCount(dungeonName string) (colCount int, err error) {
 	colCount, found := dict.GetInt(dungeonName, "col_count")
 	if !found {
-		return 0, fmt.Errorf("col_count not found for '%s'.", dungeonName)
+		return 0, fmt.Errorf("col_count not found for %q.", dungeonName)
 	}
 	return colCount, nil
 }
@@ -84,7 +84,7 @@ func GetColCount(dungeonName string) (colCount int, err error) {
 func GetRowCount(dungeonName string) (rowCount int, err error) {
 	rowCount, found := dict.GetInt(dungeonName, "row_count")
 	if !found {
-		return 0, fmt.Errorf("row_count not found for '%s'.", dungeonName)
+		return 0, fmt.Errorf("row_count not found for %q.", dungeonName)
 	}
 	return rowCount, nil
 }
