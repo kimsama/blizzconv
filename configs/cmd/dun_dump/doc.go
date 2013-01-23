@@ -3,9 +3,9 @@
 //
 // Usage:
 //
-//    dun_dump [OPTIONS]... [name.dun]...
+//    dun_dump [OPTION]... [name.dun]...
 //
-// The OPTIONS are:
+// Flags:
 //
 //    -a=false
 //            Dump all dungeons.

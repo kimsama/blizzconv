@@ -3,9 +3,9 @@
 //
 // Usage:
 //
-//    til_dump [OPTIONS]... [name.til]...
+//    til_dump [OPTION]... [name.til]...
 //
-// The OPTIONS are:
+// Flags:
 //
 //    -celini="cel.ini"
 //            Path to an ini file containing image information.

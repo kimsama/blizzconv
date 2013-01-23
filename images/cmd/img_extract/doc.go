@@ -2,9 +2,9 @@
 //
 // Usage:
 //
-//    img_extract [OPTIONS]... [name.cel|name.cl2]...
+//    img_extract [OPTION]... [name.cel|name.cl2]...
 //
-// The OPTIONS are:
+// Flags:
 //
 //    -celini="cel.ini"
 //            Path to an ini file containing image information.

@@ -3,9 +3,9 @@
 //
 // Usage:
 //
-//    min_dump [OPTIONS]... [name.min]...
+//    min_dump [OPTION]... [name.min]...
 //
-// The OPTIONS are:
+// Flags:
 //
 //    -celini="cel.ini"
 //            Path to an ini file containing image information.

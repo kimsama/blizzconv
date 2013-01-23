@@ -33,7 +33,9 @@ func init() {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "usage: %s [OPTIONS]... [name.min]...\n", os.Args[0])
+	fmt.Fprintf(os.Stderr, "Usage: %s [OPTION]... [name.min]...\n", os.Args[0])
+	fmt.Fprintln(os.Stderr)
+	fmt.Fprintln(os.Stderr, "Flags:")
 	flag.PrintDefaults()
 }
 

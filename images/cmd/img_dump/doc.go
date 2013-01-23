@@ -2,9 +2,9 @@
 //
 // Usage:
 //
-//    img_dump [OPTIONS]... [name.cel|name.cl2]...
+//    img_dump [OPTION]... [name.cel|name.cl2]...
 //
-// The OPTIONS are:
+// Flags:
 //
 //    -a
 //            Dump all image files.
