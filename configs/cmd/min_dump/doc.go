@@ -14,4 +14,4 @@
 //            Path to an extracted MPQ file.
 //    -mpqini="mpq.ini"
 //            Path to an ini file containing relative path information.
-package documentation
+package main
