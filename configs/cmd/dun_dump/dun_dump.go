@@ -1,20 +1,40 @@
+// dun_dump is a tool for constructing dungeons, based on the information
+// retrieved from a given DUN file, and storing these dungeons as png images.
+//
+// Usage:
+//
+//    dun_dump [OPTION]... [name.dun]...
+//
+// Flags:
+//
+//    -a=false
+//            Dump all dungeons.
+//    -celini="cel.ini"
+//            Path to an ini file containing image information.
+//            Note: 'cl2.ini' will be used for files that have the '.cl2' extension.
+//    -mpqdump="mpqdump/"
+//            Path to an extracted MPQ file.
+//    -mpqini="mpq.ini"
+//            Path to an ini file containing relative path information.
 package main
 
-import dbg "fmt"
-import "flag"
-import "fmt"
-import "log"
-import "os"
-import "path"
-import "strings"
+import (
+	"flag"
+	dbg "fmt"
+	"fmt"
+	"log"
+	"os"
+	"path"
+	"strings"
 
-import "github.com/mewkiz/pkg/imgutil"
-import "github.com/mewrnd/blizzconv/configs/dun"
-import "github.com/mewrnd/blizzconv/configs/dunconf"
-import "github.com/mewrnd/blizzconv/configs/min"
-import "github.com/mewrnd/blizzconv/images/cel"
-import "github.com/mewrnd/blizzconv/images/imgconf"
-import "github.com/mewrnd/blizzconv/mpq"
+	"github.com/mewkiz/pkg/imgutil"
+	"github.com/mewrnd/blizzconv/configs/dun"
+	"github.com/mewrnd/blizzconv/configs/dunconf"
+	"github.com/mewrnd/blizzconv/configs/min"
+	"github.com/mewrnd/blizzconv/images/cel"
+	"github.com/mewrnd/blizzconv/images/imgconf"
+	"github.com/mewrnd/blizzconv/mpq"
+)
 
 var flagAll bool
 
@@ -48,22 +68,19 @@ func usage() {
 }
 
 func main() {
+	var dungeonNames []string
 	if flagAll {
-		// dump all dungeons in the ini file.
-		err := dunconf.AllFunc(dungeonDump)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		return
-	}
-	if flag.NArg() < 1 {
+		dungeonNames = dunconf.DungeonNames()
+	} else if flag.NArg() > 0 {
+		dungeonNames = flag.Args()
+	} else {
 		flag.Usage()
 		os.Exit(1)
 	}
-	for _, dungeonName := range flag.Args() {
+	for _, dungeonName := range dungeonNames {
 		err := dungeonDump(dungeonName)
 		if err != nil {
-			log.Fatalln(err)
+			log.Println(err)
 		}
 	}
 }
@@ -83,7 +100,7 @@ func dungeonDump(dungeonName string) (err error) {
 	for _, dunName := range dunNames {
 		err = dungeon.Parse(dunName)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to parse %q: %s", dungeonName, err)
 		}
 	}
 	colCount, err := dunconf.GetColCount(dungeonName)
