@@ -1,8 +1,10 @@
 package imgarchive
 
-import "encoding/binary"
-import "io"
-import "os"
+import (
+	"encoding/binary"
+	"io"
+	"os"
+)
 
 // ExtractCel extracts CEL images, based on the CEL archive format described
 // below.

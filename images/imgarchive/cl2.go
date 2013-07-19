@@ -1,8 +1,10 @@
 package imgarchive
 
-import "encoding/binary"
-import "io"
-import "os"
+import (
+	"encoding/binary"
+	"io"
+	"os"
+)
 
 // ExtractCl2 extracts CL2 images, based on the CL2 archive format described
 // below.
