@@ -1,21 +1,39 @@
+// til_dump is a tool for constructing squares, based on the information
+// retrieved from a given TIL file, and storing these squares as png images.
+//
+// Usage:
+//
+//    til_dump [OPTION]... [name.til]...
+//
+// Flags:
+//
+//    -celini="cel.ini"
+//            Path to an ini file containing image information.
+//            Note: 'cl2.ini' will be used for files that have the '.cl2' extension.
+//    -mpqdump="mpqdump/"
+//            Path to an extracted MPQ file.
+//    -mpqini="mpq.ini"
+//            Path to an ini file containing relative path information.
 package main
 
-import dbg "fmt"
-import "flag"
-import "fmt"
-import "image"
-import "log"
-import "os"
-import "path"
-import "strings"
+import (
+	"flag"
+	dbg "fmt"
+	"fmt"
+	"image"
+	"log"
+	"os"
+	"path"
+	"strings"
 
-import "github.com/0xC3/progress/barcli"
-import "github.com/mewkiz/pkg/imgutil"
-import "github.com/mewrnd/blizzconv/configs/min"
-import "github.com/mewrnd/blizzconv/configs/til"
-import "github.com/mewrnd/blizzconv/images/cel"
-import "github.com/mewrnd/blizzconv/images/imgconf"
-import "github.com/mewrnd/blizzconv/mpq"
+	"github.com/0xC3/progress/barcli"
+	"github.com/mewkiz/pkg/imgutil"
+	"github.com/mewrnd/blizzconv/configs/min"
+	"github.com/mewrnd/blizzconv/configs/til"
+	"github.com/mewrnd/blizzconv/images/cel"
+	"github.com/mewrnd/blizzconv/images/imgconf"
+	"github.com/mewrnd/blizzconv/mpq"
+)
 
 func init() {
 	flag.Usage = usage
