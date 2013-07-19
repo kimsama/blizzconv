@@ -1,8 +1,9 @@
 package cel
 
-///import dbg "fmt"
-import "image"
-import "image/color"
+import (
+	"image"
+	"image/color"
+)
 
 // GetFrameDecoder returns the appropriate function for decoding the frame.
 func GetFrameDecoder(celName string, frame []byte, frameNum int) func([]byte, int, int, color.Palette) image.Image {
@@ -15,27 +16,22 @@ func GetFrameDecoder(celName string, frame []byte, frameNum int) func([]byte, in
 		switch frameSize {
 		case 0x400:
 			if isType0(celName, frameNum) {
-				///dbg.Printf("type 0: plain 32x32        [X]   - %4d\n", frameNum)
 				return DecodeFrameType0
 			}
 		case 0x220:
 			if isType2or4(frame) {
-				///dbg.Printf("type 2: triangle left      <|    - %4d\n", frameNum)
 				return DecodeFrameType2
 			} else if isType3or5(frame) {
-				///dbg.Printf("type 3: triangle right      |>   - %4d\n", frameNum)
 				return DecodeFrameType3
 			}
 		case 0x320:
 			if isType2or4(frame) {
-				///dbg.Printf("type 4: trapezoid left     /|    - %4d\n", frameNum)
 				return DecodeFrameType4
 			} else if isType3or5(frame) {
-				///dbg.Printf("type 5: trapezoid right     |\\   - %4d\n", frameNum)
 				return DecodeFrameType5
 			}
 		default:
-			///dbg.Printf("type 1: regular cel        [ ]   - %4d\n", frameNum)
+			// Default frame type: 1
 		}
 	}
 	return DecodeFrameType1

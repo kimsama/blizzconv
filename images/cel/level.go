@@ -1,7 +1,9 @@
 package cel
 
-import "image"
-import "image/color"
+import (
+	"image"
+	"image/color"
+)
 
 // DecodeFrameType0 returns an image after decoding the frame in the following
 // way:

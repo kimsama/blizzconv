@@ -23,14 +23,16 @@
 //    data   []byte
 package cel
 
-import "encoding/binary"
-import "fmt"
-import "image"
-import "image/color"
-import "os"
+import (
+	"encoding/binary"
+	"fmt"
+	"image"
+	"image/color"
+	"os"
 
-import "github.com/mewrnd/blizzconv/images/imgconf"
-import "github.com/mewrnd/blizzconv/mpq"
+	"github.com/mewrnd/blizzconv/images/imgconf"
+	"github.com/mewrnd/blizzconv/mpq"
+)
 
 // Config holds an image's palette and dimensions.
 type Config struct {
