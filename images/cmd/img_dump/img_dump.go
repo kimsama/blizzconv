@@ -1,19 +1,38 @@
+// img_dump is a tool for converting CEL and CL2 images into png images.
+//
+// Usage:
+//
+//    img_dump [OPTION]... [name.cel|name.cl2]...
+//
+// Flags:
+//
+//    -a
+//            Dump all image files.
+//    -imgini="cel.ini"
+//            Path to an ini file containing image information.
+//            Note: 'cl2.ini' will be used for files that have the '.cl2' extension.
+//    -mpqdump="mpqdump/"
+//            Path to an extracted MPQ file.
+//    -mpqini="mpq.ini"
+//            Path to an ini file containing relative path information.
 package main
 
-import "flag"
-import "fmt"
-import "log"
-import "os"
-import "path"
-import "strings"
+import (
+	"flag"
+	"fmt"
+	"log"
+	"os"
+	"path"
+	"strings"
 
-import "github.com/0xC3/progress/barcli"
-import "github.com/mewkiz/pkg/imgutil"
-import "github.com/mewrnd/blizzconv/images/cel"
-import "github.com/mewrnd/blizzconv/images/cl2"
-import "github.com/mewrnd/blizzconv/images/imgarchive"
-import "github.com/mewrnd/blizzconv/images/imgconf"
-import "github.com/mewrnd/blizzconv/mpq"
+	"github.com/0xC3/progress/barcli"
+	"github.com/mewkiz/pkg/imgutil"
+	"github.com/mewrnd/blizzconv/images/cel"
+	"github.com/mewrnd/blizzconv/images/cl2"
+	"github.com/mewrnd/blizzconv/images/imgarchive"
+	"github.com/mewrnd/blizzconv/images/imgconf"
+	"github.com/mewrnd/blizzconv/mpq"
+)
 
 var flagAll bool
 
