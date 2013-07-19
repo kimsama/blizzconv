@@ -1,7 +1,9 @@
 package min
 
-import "image"
-import "image/draw"
+import (
+	"image"
+	"image/draw"
+)
 
 // The width and height of a pillar block in pixels.
 const (

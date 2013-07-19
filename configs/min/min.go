@@ -21,11 +21,13 @@
 //    block uint16
 package min
 
-import "encoding/binary"
-import "io"
-import "os"
+import (
+	"encoding/binary"
+	"io"
+	"os"
 
-import "github.com/mewrnd/blizzconv/mpq"
+	"github.com/mewrnd/blizzconv/mpq"
+)
 
 // Pillar contains 10 to 16 blocks, each corresponding to a frame in a CEL image
 // level files.
