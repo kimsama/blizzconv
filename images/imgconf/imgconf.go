@@ -5,12 +5,14 @@
 // image format contains the relevant image information.
 package imgconf
 
-import "fmt"
-import "sort"
-import "strconv"
-import "strings"
+import (
+	"fmt"
+	"sort"
+	"strconv"
+	"strings"
 
-import ini "github.com/glacjay/goini"
+	"github.com/mewpkg/goini"
+)
 
 // IniPath is the path to the 'cel.ini' or 'cl2.ini' file which provides CEL and
 // CL2 image information.
@@ -40,7 +42,7 @@ func Len() int {
 // in the ini file.
 func AllFunc(f func(string) error) (err error) {
 	var imgNames []string
-	for imgName, _ := range dict {
+	for imgName := range dict {
 		if imgName == "" {
 			continue
 		}
