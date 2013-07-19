@@ -5,10 +5,12 @@
 // itself is identical to the CEL format.
 package cl2
 
-import "image"
-import "path"
+import (
+	"image"
+	"path"
 
-import "github.com/mewrnd/blizzconv/images/cel"
+	"github.com/mewrnd/blizzconv/images/cel"
+)
 
 // DecodeAll returns the sequential frames of a CEL image based on a given conf.
 func DecodeAll(imgName string, conf *cel.Config) (imgs []image.Image, err error) {

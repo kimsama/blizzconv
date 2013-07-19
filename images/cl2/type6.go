@@ -1,9 +1,11 @@
 package cl2
 
-import "image"
-import "image/color"
+import (
+	"image"
+	"image/color"
 
-import "github.com/mewrnd/blizzconv/images/cel"
+	"github.com/mewrnd/blizzconv/images/cel"
+)
 
 // DecodeFrameType6 returns an image after decoding the frame in the following
 // way:
