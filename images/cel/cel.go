@@ -2,12 +2,11 @@
 //
 // There are many similarities between CEL and GIF images. Both can contain
 // multiple frames and use palettes. Below is a description of the CEL image
-// format.
+// format. All integers are stored in little endian.
 //
 // CEL format:
-//    // (little endian)
 //    frameCount   uint32
-//    // frameOffsets contains the offsets to each frame. (little endian)
+//    // frameOffsets contains the offsets to each frame.
 //    frameOffsets [frameCount + 1]uint32
 //    // frames contains the header and data of each frame.
 //    //    start: frameOffsets[frameNum]
@@ -15,7 +14,7 @@
 //    frames       [frameCount][]byte
 //
 // CEL frame format:
-//    // header is optional
+//    // header is optional.
 //    header []byte
 //    // data contains the frame pixel content.
 //    //
@@ -34,13 +33,15 @@ import (
 	"github.com/mewrnd/blizzconv/mpq"
 )
 
-// Config holds an image's palette and dimensions.
+// Config contains the image's dimensions and color palette.
 type Config struct {
-	Width       int
-	Height      int
-	FrameWidth  map[int]int
+	Width  int
+	Height int
+	// FrameWidth is a map from frameNum to frameWidth.
+	FrameWidth map[int]int
+	// FrameHeight is a map from frameNum to frameHeight.
 	FrameHeight map[int]int
-	Pal         color.Palette
+	Pal color.Palette
 }
 
 // DecodeAll returns the sequential frames of a CEL image based on a given conf.
