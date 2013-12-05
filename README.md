@@ -9,3 +9,11 @@ Supported formats
 
  * cel
  * cl2
+
+public domain
+-------------
+
+Wherever possible the code of this project is is hereby released into the
+*[public domain][]*.
+
+[public domain]: https://creativecommons.org/publicdomain/zero/1.0/
