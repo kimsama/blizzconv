@@ -298,8 +298,8 @@ func DecodeFrameType5(frame []byte, width int, height int, pal color.Palette) im
 
 // decodeLineTransparencyLeft decodes a line of the frame, where regularCount
 // represent the number of explicit regular pixels, zeroCount the number of
-// explicit transparent pixels and the rest of the line is transparent. Each
-// line is assumed to have a width of 32 pixels.
+// explicit transparent pixels and the rest of the line is implicitly
+// transparent. Each line is assumed to have a width of 32 pixels.
 func decodeLineTransparencyLeft(dst draw.Image, setPixel func(dst draw.Image, c color.Color), frame []byte, regularCount, zeroCount int, pal color.Palette) {
 	// Total number of explicit pixels.
 	decodeCount := zeroCount + regularCount
@@ -320,8 +320,8 @@ func decodeLineTransparencyLeft(dst draw.Image, setPixel func(dst draw.Image, c 
 
 // decodeLineTransparencyRight decodes a line of the frame, where regularCount
 // represent the number of explicit regular pixels, zeroCount the number of
-// explicit transparent pixels and the rest of the line is transparent. Each
-// line is assumed to have a width of 32 pixels.
+// explicit transparent pixels and the rest of the line is implicitly
+// transparent. Each line is assumed to have a width of 32 pixels.
 func decodeLineTransparencyRight(dst draw.Image, setPixel func(dst draw.Image, c color.Color), frame []byte, regularCount, zeroCount int, pal color.Palette) {
 	// Total number of explicit pixels.
 	decodeCount := zeroCount + regularCount

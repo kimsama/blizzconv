@@ -54,10 +54,13 @@ type Config struct {
 //
 // Note: The absolute path of celName is resolved using mpq.GetPath.
 func DecodeAll(celName string, conf *Config) (imgs []image.Image, err error) {
+	// Get frame contents.
 	frames, err := GetFrames(celName)
 	if err != nil {
 		return nil, err
 	}
+
+	// Decode frames.
 	for frameNum, frame := range frames {
 		width, ok := conf.FrameWidth[frameNum]
 		if !ok {
@@ -69,10 +72,13 @@ func DecodeAll(celName string, conf *Config) (imgs []image.Image, err error) {
 			// Use default frame height.
 			height = conf.Height
 		}
+
+		// Decode frame.
 		decodeFrame := GetFrameDecoder(celName, frame, frameNum)
 		img := decodeFrame(frame, width, height, conf.Pal)
 		imgs = append(imgs, img)
 	}
+
 	return imgs, nil
 }
 
@@ -81,6 +87,7 @@ func DecodeAll(celName string, conf *Config) (imgs []image.Image, err error) {
 //
 // Note: The absolute path of celName is resolved using mpq.GetPath.
 func GetFrames(celName string) (frames [][]byte, err error) {
+	// Open CEL file.
 	celPath, err := mpq.GetPath(celName)
 	if err != nil {
 		return nil, err
@@ -90,28 +97,38 @@ func GetFrames(celName string) (frames [][]byte, err error) {
 		return nil, err
 	}
 	defer fr.Close()
+
+	// Read frame count.
 	var frameCount uint32
 	err = binary.Read(fr, binary.LittleEndian, &frameCount)
 	if err != nil {
-		return nil, fmt.Errorf("cel.GetFrames: error while reading frame count for %q: %v", celName, err)
+		return nil, fmt.Errorf("cel.GetFrames: unable to read frame count for %q: %v", celName, err)
 	}
+
+	// Read frame offsets.
 	frameOffsets := make([]uint32, frameCount+1)
 	err = binary.Read(fr, binary.LittleEndian, frameOffsets)
 	if err != nil {
-		return nil, fmt.Errorf("cel.GetFrames: error while reading frame offsets for %q: %v", celName, err)
+		return nil, fmt.Errorf("cel.GetFrames: unable to read frame offsets for %q: %v", celName, err)
 	}
+
 	for frameNum := uint32(0); frameNum < frameCount; frameNum++ {
+		// Ignore frame header.
 		headerSize := imgconf.GetHeaderSize(celName)
 		frameStart := int64(frameOffsets[frameNum]) + int64(headerSize)
+
 		frameEnd := int64(frameOffsets[frameNum+1])
 		frameSize := frameEnd - frameStart
+
+		// Read frame content.
 		frame := make([]byte, frameSize)
 		_, err := fr.ReadAt(frame, frameStart)
 		if err != nil {
-			return nil, fmt.Errorf("cel.GetFrames: error while reading frame content for %q: %v", celName, err)
+			return nil, fmt.Errorf("cel.GetFrames: unable to read frame content for %q: %v", celName, err)
 		}
 		frames = append(frames, frame)
 	}
+
 	return frames, nil
 }
 
@@ -128,10 +145,6 @@ func GetConf(celName, relPalPath string) (conf *Config, err error) {
 	if err != nil {
 		return nil, err
 	}
-	pal, err := GetPal(relPalPath)
-	if err != nil {
-		return nil, err
-	}
 	frameWidth, err := imgconf.GetFrameWidth(celName)
 	if err != nil {
 		return nil, err
@@ -140,12 +153,16 @@ func GetConf(celName, relPalPath string) (conf *Config, err error) {
 	if err != nil {
 		return nil, err
 	}
+	pal, err := GetPal(relPalPath)
+	if err != nil {
+		return nil, err
+	}
 	conf = &Config{
 		Width:       width,
 		Height:      height,
-		Pal:         pal,
 		FrameWidth:  frameWidth,
 		FrameHeight: frameHeight,
+		Pal:         pal,
 	}
 	return conf, nil
 }

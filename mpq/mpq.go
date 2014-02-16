@@ -3,6 +3,7 @@ package mpq
 
 import (
 	"fmt"
+	"path"
 
 	"github.com/mewpkg/goini"
 )
@@ -25,6 +26,12 @@ func Init() (err error) {
 
 // ExtractPath is the path to an extracted MPQ file.
 var ExtractPath string
+
+// AbsPath returns the absolute path of relPath. The absolute path of relPath is
+// relative to mpq.ExtractPath.
+func AbsPath(relPath string) (absPath string) {
+	return path.Join(ExtractPath, relPath)
+}
 
 // GetPath returns the full path of name.
 func GetPath(name string) (path string, err error) {
