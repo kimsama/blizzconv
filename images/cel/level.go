@@ -3,6 +3,7 @@ package cel
 import (
 	"image"
 	"image/color"
+	"image/draw"
 )
 
 // DecodeFrameType0 returns an image after decoding the frame in the following
@@ -14,13 +15,13 @@ import (
 //         color in the palette.
 //
 // Type0 corresponds to a plain 32x32 images, with no transparency.
-func DecodeFrameType0(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+func DecodeFrameType0(frame []byte, width int, height int, pal color.Palette) image.Image {
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	setPixel := GetPixelSetter(width, height)
 	for _, b := range frame {
-		setPixel(rgba, pal[b])
+		setPixel(img, pal[b])
 	}
-	return rgba
+	return img
 }
 
 // DecodeFrameType2 returns an image after decoding the frame in the following
@@ -33,10 +34,10 @@ func DecodeFrameType0(frame []byte, width int, height int, pal color.Palette) (i
 //         from the illustration.
 //
 // Below is an illustration of the 32x32 image, where a space represents an
-// implicit transparent pixel, an 'x' represents an explicit regular pixel and a
-// 0 represents an explicit transparent pixel.
+// implicit transparent pixel, a '0' represents an explicit transparent pixel
+// and an 'x' represents an explicit regular pixel.
 //
-// Note: the output image will be "upside-down" compared to the illustration.
+// Note: The output image will be "upside-down" compared to the illustration.
 //
 //    +--------------------------------+
 //    |                                |
@@ -72,8 +73,10 @@ func DecodeFrameType0(frame []byte, width int, height int, pal color.Palette) (i
 //    |                            xxxx|
 //    |                            00xx|
 //    +--------------------------------+
-func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+//
+// Type2 corresponds to a 32x32 images of a left facing triangle.
+func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) image.Image {
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	setPixel := GetPixelSetter(width, height)
 	decodeCounts := []int{0, 4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 28, 28, 24, 24, 20, 20, 16, 16, 12, 12, 8, 8, 4, 4}
 	for lineNum, decodeCount := range decodeCounts {
@@ -82,10 +85,11 @@ func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) (i
 		case 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31:
 			zeroCount = 2
 		}
-		decodeLineTransparencyLeft(rgba, setPixel, frame, zeroCount, decodeCount, pal)
+		regularCount := decodeCount - zeroCount
+		decodeLineTransparencyLeft(img, setPixel, frame, regularCount, zeroCount, pal)
 		frame = frame[decodeCount:]
 	}
-	return rgba
+	return img
 }
 
 // DecodeFrameType3 returns an image after decoding the frame in the following
@@ -98,10 +102,10 @@ func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) (i
 //         from the illustration.
 //
 // Below is an illustration of the 32x32 image, where a space represents an
-// implicit transparent pixel, an 'x' represents an explicit regular pixel and a
-// 0 represents an explicit transparent pixel.
+// implicit transparent pixel, a '0' represents an explicit transparent pixel
+// and an 'x' represents an explicit regular pixel.
 //
-// Note: the output image will be "upside-down" compared to the illustration.
+// Note: The output image will be "upside-down" compared to the illustration.
 //
 //    +--------------------------------+
 //    |                                |
@@ -137,8 +141,10 @@ func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) (i
 //    |xxxx                            |
 //    |xx00                            |
 //    +--------------------------------+
-func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+//
+// Type3 corresponds to a 32x32 images of a right facing triangle.
+func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) image.Image {
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	setPixel := GetPixelSetter(width, height)
 	decodeCounts := []int{0, 4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 28, 28, 24, 24, 20, 20, 16, 16, 12, 12, 8, 8, 4, 4}
 	for lineNum, decodeCount := range decodeCounts {
@@ -147,10 +153,11 @@ func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) (i
 		case 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31:
 			zeroCount = 2
 		}
-		decodeLineTransparencyRight(rgba, setPixel, frame, zeroCount, decodeCount, pal)
+		regularCount := decodeCount - zeroCount
+		decodeLineTransparencyRight(img, setPixel, frame, regularCount, zeroCount, pal)
 		frame = frame[decodeCount:]
 	}
-	return rgba
+	return img
 }
 
 // DecodeFrameType4 returns an image after decoding the frame in the following
@@ -163,10 +170,10 @@ func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) (i
 //         from the illustration.
 //
 // Below is an illustration of the 32x32 image, where a space represents an
-// implicit transparent pixel, an 'x' represents an explicit regular pixel and a
-// 0 represents an explicit transparent pixel.
+// implicit transparent pixel, a '0' represents an explicit transparent pixel
+// and an 'x' represents an explicit regular pixel.
 //
-// Note: the output image will be "upside-down" compared to the illustration.
+// Note: The output image will be "upside-down" compared to the illustration.
 //
 //    +--------------------------------+
 //    |                            00xx|
@@ -202,8 +209,10 @@ func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) (i
 //    |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
 //    |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
 //    +--------------------------------+
-func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+//
+// Type4 corresponds to a 32x32 images of a left facing trapezoid.
+func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) image.Image {
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	setPixel := GetPixelSetter(width, height)
 	decodeCounts := []int{4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32}
 	for lineNum, decodeCount := range decodeCounts {
@@ -212,10 +221,11 @@ func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) (i
 		case 0, 2, 4, 6, 8, 10, 12, 14:
 			zeroCount = 2
 		}
-		decodeLineTransparencyLeft(rgba, setPixel, frame, zeroCount, decodeCount, pal)
+		regularCount := decodeCount - zeroCount
+		decodeLineTransparencyLeft(img, setPixel, frame, regularCount, zeroCount, pal)
 		frame = frame[decodeCount:]
 	}
-	return rgba
+	return img
 }
 
 // DecodeFrameType5 returns an image after decoding the frame in the following
@@ -228,10 +238,10 @@ func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) (i
 //         from the illustration.
 //
 // Below is an illustration of the 32x32 image, where a space represents an
-// implicit transparent pixel, an 'x' represents an explicit regular pixel and a
-// 0 represents an explicit transparent pixel.
+// implicit transparent pixel, a '0' represents an explicit transparent pixel
+// and an 'x' represents an explicit regular pixel.
 //
-// Note: the output image will be "upside-down" compared to the illustration.
+// Note: The output image will be "upside-down" compared to the illustration.
 //
 //    +--------------------------------+
 //    |xx00                            |
@@ -267,8 +277,10 @@ func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) (i
 //    |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
 //    |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
 //    +--------------------------------+
-func DecodeFrameType5(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+//
+// Type5 corresponds to a 32x32 images of a right facing trapezoid.
+func DecodeFrameType5(frame []byte, width int, height int, pal color.Palette) image.Image {
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	setPixel := GetPixelSetter(width, height)
 	decodeCounts := []int{4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32}
 	for lineNum, decodeCount := range decodeCounts {
@@ -277,46 +289,55 @@ func DecodeFrameType5(frame []byte, width int, height int, pal color.Palette) (i
 		case 0, 2, 4, 6, 8, 10, 12, 14:
 			zeroCount = 2
 		}
-		decodeLineTransparencyRight(rgba, setPixel, frame, zeroCount, decodeCount, pal)
+		regularCount := decodeCount - zeroCount
+		decodeLineTransparencyRight(img, setPixel, frame, regularCount, zeroCount, pal)
 		frame = frame[decodeCount:]
 	}
-	return rgba
+	return img
 }
 
-// decodeLineTransparencyLeft decodes a line from the frame, where decodeCount
+// decodeLineTransparencyLeft decodes a line of the frame, where regularCount
 // represent the number of explicit regular pixels, zeroCount the number of
 // explicit transparent pixels and the rest of the line is transparent. Each
 // line is assumed to have a width of 32 pixels.
-func decodeLineTransparencyLeft(rgba *image.RGBA, setPixel func(*image.RGBA, color.Color), frame []byte, zeroCount, decodeCount int, pal color.Palette) {
-	// transparent pixels
+func decodeLineTransparencyLeft(dst draw.Image, setPixel func(dst draw.Image, c color.Color), frame []byte, regularCount, zeroCount int, pal color.Palette) {
+	// Total number of explicit pixels.
+	decodeCount := zeroCount + regularCount
+
+	// Implicit transparent pixels.
 	for i := decodeCount; i < 32; i++ {
-		setPixel(rgba, color.RGBA{})
+		setPixel(dst, color.Transparent)
 	}
-	// zeroes (transparent pixels)
+	// Explicit transparent pixels (zeroes).
 	for i := 0; i < zeroCount; i++ {
-		setPixel(rgba, color.RGBA{})
+		setPixel(dst, color.Transparent)
 	}
-	// regular pixels
+	// Explicit regular pixels.
 	for i := zeroCount; i < decodeCount; i++ {
-		setPixel(rgba, pal[frame[i]])
+		setPixel(dst, pal[frame[i]])
 	}
 }
 
-// decodeLineTransparencyRight decodes a line from the frame, where decodeCount
+// decodeLineTransparencyRight decodes a line of the frame, where regularCount
 // represent the number of explicit regular pixels, zeroCount the number of
 // explicit transparent pixels and the rest of the line is transparent. Each
 // line is assumed to have a width of 32 pixels.
-func decodeLineTransparencyRight(rgba *image.RGBA, setPixel func(*image.RGBA, color.Color), frame []byte, zeroCount, decodeCount int, pal color.Palette) {
-	// regular pixels
-	for i := 0; i < decodeCount-zeroCount; i++ {
-		setPixel(rgba, pal[frame[i]])
+func decodeLineTransparencyRight(dst draw.Image, setPixel func(dst draw.Image, c color.Color), frame []byte, regularCount, zeroCount int, pal color.Palette) {
+	// Total number of explicit pixels.
+	decodeCount := zeroCount + regularCount
+
+	// Explicit regular pixels.
+	for i := 0; i < regularCount; i++ {
+		setPixel(dst, pal[frame[i]])
 	}
-	// zeroes (transparent pixels)
+
+	// Explicit transparent pixels (zeroes).
 	for i := 0; i < zeroCount; i++ {
-		setPixel(rgba, color.RGBA{})
+		setPixel(dst, color.Transparent)
 	}
-	// transparent pixels
+
+	// Implicit transparent pixels.
 	for i := decodeCount; i < 32; i++ {
-		setPixel(rgba, color.RGBA{})
+		setPixel(dst, color.Transparent)
 	}
 }

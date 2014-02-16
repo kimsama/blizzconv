@@ -18,6 +18,8 @@ import (
 //    r byte   // red
 //    g byte   // green
 //    b byte   // blue
+//
+// Note: The absolute path of relPalPath is relative to mpq.ExtractPath.
 func GetPal(relPalPath string) (pal color.Palette, err error) {
 	palPath := mpq.ExtractPath + relPalPath
 	buf, err := ioutil.ReadFile(palPath)
@@ -25,7 +27,7 @@ func GetPal(relPalPath string) (pal color.Palette, err error) {
 		return nil, err
 	}
 	if len(buf) != 256*3 {
-		return nil, fmt.Errorf("invalid pal size (%d) for %q.", len(buf), relPalPath)
+		return nil, fmt.Errorf("invalid pal size (%d) for %q", len(buf), relPalPath)
 	}
 	pal = make(color.Palette, 256)
 	for i := range pal {

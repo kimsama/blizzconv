@@ -3,15 +3,16 @@ package cel
 import (
 	"image"
 	"image/color"
+	"image/draw"
 )
 
 // GetFrameDecoder returns the appropriate function for decoding the frame.
-func GetFrameDecoder(celName string, frame []byte, frameNum int) func([]byte, int, int, color.Palette) image.Image {
+func GetFrameDecoder(celName string, frame []byte, frameNum int) func(frame []byte, width int, height int, pal color.Palette) image.Image {
 	frameSize := len(frame)
 	switch celName {
 	case "l1.cel", "l2.cel", "l3.cel", "l4.cel", "town.cel":
 		// Some regular (Type1) CEL images just happen to have the exact frame
-		// size of 0x220, 0x320 and 0x400. Therefor the isType* functions are
+		// size of 0x220, 0x320 and 0x400. Therefore the isType* functions are
 		// required.
 		switch frameSize {
 		case 0x400:
@@ -31,13 +32,15 @@ func GetFrameDecoder(celName string, frame []byte, frameNum int) func([]byte, in
 				return DecodeFrameType5
 			}
 		default:
-			// Default frame type: 1
+			// Regular frame (type 1).
 		}
 	}
 	return DecodeFrameType1
 }
 
 // isType0 returns true if the image is a plain 32x32.
+//
+// ref: DecodeFrameType0
 func isType0(celName string, frameNum int) bool {
 	// The following frames are Type1, thus return false.
 	switch celName {
@@ -62,6 +65,7 @@ func isType0(celName string, frameNum int) bool {
 			return false
 		}
 	}
+
 	return true
 }
 
@@ -72,10 +76,11 @@ func isType0(celName string, frameNum int) bool {
 func isType2or4(frame []byte) bool {
 	zeroPositions := []int{0, 1, 8, 9, 24, 25, 48, 49, 80, 81, 120, 121, 168, 169, 224, 225}
 	for _, zeroPos := range zeroPositions {
-		if frame[zeroPos] != 0x00 {
+		if frame[zeroPos] != 0 {
 			return false
 		}
 	}
+
 	return true
 }
 
@@ -86,10 +91,11 @@ func isType2or4(frame []byte) bool {
 func isType3or5(frame []byte) bool {
 	zeroPositions := []int{2, 3, 14, 15, 34, 35, 62, 63, 98, 99, 142, 143, 194, 195, 254, 255}
 	for _, zeroPos := range zeroPositions {
-		if frame[zeroPos] != 0x00 {
+		if frame[zeroPos] != 0 {
 			return false
 		}
 	}
+
 	return true
 }
 
@@ -119,38 +125,38 @@ func isType3or5(frame []byte) bool {
 //         +---+---+
 //           0   1      [ x ]
 //
-// Type1 is the most common type for CEL images.
-func DecodeFrameType1(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+// Type1 corresponds to a regular CEL frame image of the specified dimensions.
+func DecodeFrameType1(frame []byte, width int, height int, pal color.Palette) image.Image {
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	setPixel := GetPixelSetter(width, height)
 	pos := 0
 	for pos < len(frame) {
 		chunkSize := int(int8(frame[pos]))
 		pos++
 		if chunkSize < 0 {
-			// transparent pixels
+			// Transparent pixels.
 			for i := 0; i > chunkSize; i-- {
-				setPixel(rgba, color.RGBA{})
+				setPixel(img, color.Transparent)
 			}
 		} else {
-			// regular pixels
+			// Regular pixels.
 			for i := 0; i < chunkSize; i++ {
-				setPixel(rgba, pal[frame[pos]])
+				setPixel(img, pal[frame[pos]])
 				pos++
 			}
 		}
 	}
-	return rgba
+	return img
 }
 
 // GetPixelSetter returns a function that can be invoced to incrementally set
 // pixels, starting in the lower left corner, going from left to right, and then
 // row by row from the bottom to the top of the image.
-func GetPixelSetter(width, height int) func(*image.RGBA, color.Color) {
+func GetPixelSetter(width, height int) func(dst draw.Image, c color.Color) {
 	var x, y int
 	y = height - 1
-	setPixel := func(rgba *image.RGBA, c color.Color) {
-		rgba.Set(x, y, c)
+	setPixel := func(dst draw.Image, c color.Color) {
+		dst.Set(x, y, c)
 		if x == width-1 {
 			x = 0
 			y--

@@ -51,6 +51,8 @@ type Config struct {
 }
 
 // DecodeAll returns the sequential frames of a CEL image based on a given conf.
+//
+// Note: The absolute path of celName is resolved using mpq.GetPath.
 func DecodeAll(celName string, conf *Config) (imgs []image.Image, err error) {
 	frames, err := GetFrames(celName)
 	if err != nil {
@@ -59,10 +61,12 @@ func DecodeAll(celName string, conf *Config) (imgs []image.Image, err error) {
 	for frameNum, frame := range frames {
 		width, ok := conf.FrameWidth[frameNum]
 		if !ok {
+			// Use default frame width.
 			width = conf.Width
 		}
 		height, ok := conf.FrameHeight[frameNum]
 		if !ok {
+			// Use default frame height.
 			height = conf.Height
 		}
 		decodeFrame := GetFrameDecoder(celName, frame, frameNum)
@@ -74,6 +78,8 @@ func DecodeAll(celName string, conf *Config) (imgs []image.Image, err error) {
 
 // GetFrames returns a slice of frames, whose content has been retrieved based
 // on the CEL format described above.
+//
+// Note: The absolute path of celName is resolved using mpq.GetPath.
 func GetFrames(celName string) (frames [][]byte, err error) {
 	celPath, err := mpq.GetPath(celName)
 	if err != nil {
@@ -87,12 +93,12 @@ func GetFrames(celName string) (frames [][]byte, err error) {
 	var frameCount uint32
 	err = binary.Read(fr, binary.LittleEndian, &frameCount)
 	if err != nil {
-		return nil, fmt.Errorf("cel.GetFrames: error while reading frame count for %q: %s.", celName, err)
+		return nil, fmt.Errorf("cel.GetFrames: error while reading frame count for %q: %v", celName, err)
 	}
 	frameOffsets := make([]uint32, frameCount+1)
 	err = binary.Read(fr, binary.LittleEndian, frameOffsets)
 	if err != nil {
-		return nil, fmt.Errorf("cel.GetFrames: error while reading frame offsets for %q: %s.", celName, err)
+		return nil, fmt.Errorf("cel.GetFrames: error while reading frame offsets for %q: %v", celName, err)
 	}
 	for frameNum := uint32(0); frameNum < frameCount; frameNum++ {
 		headerSize := imgconf.GetHeaderSize(celName)
@@ -102,7 +108,7 @@ func GetFrames(celName string) (frames [][]byte, err error) {
 		frame := make([]byte, frameSize)
 		_, err := fr.ReadAt(frame, frameStart)
 		if err != nil {
-			return nil, fmt.Errorf("cel.GetFrames: error while reading frame content for %q: %s.", celName, err)
+			return nil, fmt.Errorf("cel.GetFrames: error while reading frame content for %q: %v", celName, err)
 		}
 		frames = append(frames, frame)
 	}
@@ -110,6 +116,9 @@ func GetFrames(celName string) (frames [][]byte, err error) {
 }
 
 // GetConf returns a conf containing the relevant image information.
+//
+// Note: The absolute path of celName is resolved using mpq.GetPath and
+// relPalPath is relative to mpq.ExtractPath.
 func GetConf(celName, relPalPath string) (conf *Config, err error) {
 	width, err := imgconf.GetWidth(celName)
 	if err != nil {
