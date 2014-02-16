@@ -41,35 +41,36 @@ import (
 //           0   1      [ x ]
 //
 // Type6 is the only type for CL2 images.
-func DecodeFrameType6(frame []byte, width int, height int, pal color.Palette) (img image.Image) {
-	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+func DecodeFrameType6(frame []byte, width int, height int, pal color.Palette) image.Image {
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	setPixel := cel.GetPixelSetter(width, height)
 	pos := 0
 	for pos < len(frame) {
 		chunkSize := int(int8(frame[pos]))
 		pos++
 		if chunkSize >= 0 {
-			// transparent pixels
+			// Transparent pixels.
 			for i := 0; i < chunkSize; i++ {
-				setPixel(rgba, color.RGBA{})
+				setPixel(img, color.Transparent)
 			}
 		} else {
 			chunkSize = -chunkSize
 			if chunkSize <= 65 {
-				// regular pixels
+				// Regular pixels.
 				for i := 0; i < chunkSize; i++ {
-					setPixel(rgba, pal[frame[pos]])
+					setPixel(img, pal[frame[pos]])
 					pos++
 				}
 			} else {
 				chunkSize -= 65
-				// RLE encoded pixels
+				// Run-length encoded pixels.
+				c := pal[frame[pos]]
 				for i := 0; i < chunkSize; i++ {
-					setPixel(rgba, pal[frame[pos]])
+					setPixel(img, c)
 				}
 				pos++
 			}
 		}
 	}
-	return rgba
+	return img
 }
