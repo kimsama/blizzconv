@@ -5,6 +5,7 @@
 // format. All integers are stored in little endian.
 //
 // CEL format:
+//    // frameCount specifies the number of frames contained within the image.
 //    frameCount   uint32
 //    // frameOffsets contains the offsets to each frame.
 //    frameOffsets [frameCount + 1]uint32
@@ -33,14 +34,19 @@ import (
 	"github.com/mewrnd/blizzconv/mpq"
 )
 
-// Config contains the image's dimensions and color palette.
+// A Config specifies the frame dimensions and color palette of an image.
 type Config struct {
-	Width  int
+	// The width of each frame in pixels.
+	Width int
+	// The height of each frame in pixels.
 	Height int
-	// FrameWidth is a map from frameNum to frameWidth.
+	// A map from frameNum to frameWidth. It is used to override the default
+	// frame width for specific frames.
 	FrameWidth map[int]int
-	// FrameHeight is a map from frameNum to frameHeight.
+	// A map from frameNum to frameHeight. It is used to override the default
+	// frame height for specific frames.
 	FrameHeight map[int]int
+	// The palette used for decoding.
 	Pal color.Palette
 }
 
