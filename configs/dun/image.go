@@ -1,9 +1,11 @@
 package dun
 
-import "image"
-import "image/draw"
+import (
+	"image"
+	"image/draw"
 
-import "github.com/mewrnd/blizzconv/configs/min"
+	"github.com/mewrnd/blizzconv/configs/min"
+)
 
 // Image returns an image constructed from the pillars associated with each
 // coordinate of the dungeon map.
@@ -16,8 +18,8 @@ func (dungeon *Dungeon) Image(colCount, rowCount int, pillars []min.Pillar, leve
 	dst := image.NewRGBA(image.Rect(0, 0, mapWidth, mapHeight))
 	for row := 0; row < rowCount; row++ {
 		for col := 0; col < colCount; col++ {
-			pillarNum := dungeon[col][row]
-			if pillarNum != -1 {
+			pillarNum, ok := dungeon[col][row]["pillarNum"]
+			if ok {
 				rect := GetPillarRect(col, row, mapWidth, pillarHeight)
 				src := pillars[pillarNum].Image(levelFrames)
 				draw.Draw(dst, rect, src, image.ZP, draw.Over)

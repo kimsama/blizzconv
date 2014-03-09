@@ -2,11 +2,13 @@
 // required for parsing DUN files.
 package dunconf
 
-import "fmt"
-import "sort"
-import "strings"
+import (
+	"fmt"
+	"sort"
+	"strings"
 
-import ini "github.com/glacjay/goini"
+	"github.com/mewpkg/goini"
+)
 
 var dict ini.Dict
 
@@ -24,24 +26,16 @@ func Init() (err error) {
 	return nil
 }
 
-// AllFunc calls the function f with the parameter dunName once for each dungeon
-// in the ini file.
-func AllFunc(f func(string) error) (err error) {
-	var dunNames []string
-	for dunName, _ := range dict {
-		if dunName == "" || strings.HasSuffix(dunName, ".dun") {
+// DungeonNames returns a slice of dungeon names based on the ini file.
+func DungeonNames() (dungeonNames []string) {
+	for dungeonName := range dict {
+		if dungeonName == "" || strings.HasSuffix(dungeonName, ".dun") {
 			continue
 		}
-		dunNames = append(dunNames, dunName)
+		dungeonNames = append(dungeonNames, dungeonName)
 	}
-	sort.Strings(dunNames)
-	for _, dunName := range dunNames {
-		err = f(dunName)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	sort.Strings(dungeonNames)
+	return dungeonNames
 }
 
 // GetColStart returns the starting col of a given DUN file.
@@ -53,7 +47,7 @@ func GetColStart(dunName string) (colStart int, err error) {
 	return colStart, nil
 }
 
-// GetColStart returns the starting row of a given DUN file.
+// GetRowStart returns the starting row of a given DUN file.
 func GetRowStart(dunName string) (rowStart int, err error) {
 	rowStart, found := dict.GetInt(dunName, "row_start")
 	if !found {
