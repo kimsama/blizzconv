@@ -87,6 +87,16 @@ func GetRelPalPaths(imgName string) (relPalPaths []string) {
 	return strings.Split(rawRelPalPaths, ",")
 }
 
+// GetRelTrnPaths returns the relative paths to the image color transition
+// files.
+func GetRelTrnPaths(imgName string) (relTrnPaths []string) {
+	rawRelTrnPaths, found := dict.GetString(imgName, "trns")
+	if !found {
+		return nil
+	}
+	return strings.Split(rawRelTrnPaths, ",")
+}
+
 // GetHeaderSize returns the header size of the image.
 func GetHeaderSize(imgName string) (headerSize int) {
 	headerSize, found := dict.GetInt(imgName, "header_size")
