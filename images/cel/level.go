@@ -30,8 +30,8 @@ func DecodeFrameType0(frame []byte, width int, height int, pal color.Palette) im
 //    1) Dump one line of 32 pixels at the time.
 //       - The illustration below tells if a pixel is transparent or regular.
 //       - Only regular and zero (transparent) pixels are explicitly stored in
-//         the frame content. The transparent pixels are implicitly referred
-//         from the illustration.
+//         the frame content. All other pixels of the illustration are
+//         implicitly transparent.
 //
 // Below is an illustration of the 32x32 image, where a space represents an
 // implicit transparent pixel, a '0' represents an explicit transparent pixel
@@ -80,9 +80,8 @@ func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) im
 	setPixel := GetPixelSetter(width, height)
 	decodeCounts := []int{0, 4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 28, 28, 24, 24, 20, 20, 16, 16, 12, 12, 8, 8, 4, 4}
 	for lineNum, decodeCount := range decodeCounts {
-		var zeroCount int
-		switch lineNum {
-		case 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31:
+		zeroCount := 0
+		if lineNum%2 == 1 {
 			zeroCount = 2
 		}
 		regularCount := decodeCount - zeroCount
@@ -98,8 +97,8 @@ func DecodeFrameType2(frame []byte, width int, height int, pal color.Palette) im
 //    1) Dump one line of 32 pixels at the time.
 //       - The illustration below tells if a pixel is transparent or regular.
 //       - Only regular and zero (transparent) pixels are explicitly stored in
-//         the frame content. The transparent pixels are implicitly referred
-//         from the illustration.
+//         the frame content. All other pixels of the illustration are
+//         implicitly transparent.
 //
 // Below is an illustration of the 32x32 image, where a space represents an
 // implicit transparent pixel, a '0' represents an explicit transparent pixel
@@ -148,9 +147,8 @@ func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) im
 	setPixel := GetPixelSetter(width, height)
 	decodeCounts := []int{0, 4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 28, 28, 24, 24, 20, 20, 16, 16, 12, 12, 8, 8, 4, 4}
 	for lineNum, decodeCount := range decodeCounts {
-		var zeroCount int
-		switch lineNum {
-		case 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31:
+		zeroCount := 0
+		if lineNum%2 == 1 {
 			zeroCount = 2
 		}
 		regularCount := decodeCount - zeroCount
@@ -166,8 +164,8 @@ func DecodeFrameType3(frame []byte, width int, height int, pal color.Palette) im
 //    1) Dump one line of 32 pixels at the time.
 //       - The illustration below tells if a pixel is transparent or regular.
 //       - Only regular and zero (transparent) pixels are explicitly stored in
-//         the frame content. The transparent pixels are implicitly referred
-//         from the illustration.
+//         the frame content. All other pixels of the illustration are
+//         implicitly transparent.
 //
 // Below is an illustration of the 32x32 image, where a space represents an
 // implicit transparent pixel, a '0' represents an explicit transparent pixel
@@ -216,7 +214,7 @@ func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) im
 	setPixel := GetPixelSetter(width, height)
 	decodeCounts := []int{4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32}
 	for lineNum, decodeCount := range decodeCounts {
-		var zeroCount int
+		zeroCount := 0
 		switch lineNum {
 		case 0, 2, 4, 6, 8, 10, 12, 14:
 			zeroCount = 2
@@ -234,8 +232,8 @@ func DecodeFrameType4(frame []byte, width int, height int, pal color.Palette) im
 //    1) Dump one line of 32 pixels at the time.
 //       - The illustration below tells if a pixel is transparent or regular.
 //       - Only regular and zero (transparent) pixels are explicitly stored in
-//         the frame content. The transparent pixels are implicitly referred
-//         from the illustration.
+//         the frame content. All other pixels of the illustration are
+//         implicitly transparent.
 //
 // Below is an illustration of the 32x32 image, where a space represents an
 // implicit transparent pixel, a '0' represents an explicit transparent pixel
@@ -284,7 +282,7 @@ func DecodeFrameType5(frame []byte, width int, height int, pal color.Palette) im
 	setPixel := GetPixelSetter(width, height)
 	decodeCounts := []int{4, 4, 8, 8, 12, 12, 16, 16, 20, 20, 24, 24, 28, 28, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32}
 	for lineNum, decodeCount := range decodeCounts {
-		var zeroCount int
+		zeroCount := 0
 		switch lineNum {
 		case 0, 2, 4, 6, 8, 10, 12, 14:
 			zeroCount = 2

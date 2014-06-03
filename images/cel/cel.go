@@ -40,10 +40,10 @@ type Config struct {
 	Width int
 	// The height of each frame in pixels.
 	Height int
-	// A map from frameNum to frameWidth. It is used to override the default
-	// frame width for specific frames.
+	// A map from frameNum to frameWidth. It's used to override the default frame
+	// width for specific frames.
 	FrameWidth map[int]int
-	// A map from frameNum to frameHeight. It is used to override the default
+	// A map from frameNum to frameHeight. It's used to override the default
 	// frame height for specific frames.
 	FrameHeight map[int]int
 	// The palette used for decoding.
@@ -92,41 +92,42 @@ func GetFrames(celName string) (frames [][]byte, err error) {
 	if err != nil {
 		return nil, err
 	}
-	fr, err := os.Open(celPath)
+	f, err := os.Open(celPath)
 	if err != nil {
 		return nil, err
 	}
-	defer fr.Close()
+	defer f.Close()
 
 	// Read frame count.
 	var frameCount uint32
-	err = binary.Read(fr, binary.LittleEndian, &frameCount)
+	err = binary.Read(f, binary.LittleEndian, &frameCount)
 	if err != nil {
 		return nil, fmt.Errorf("cel.GetFrames: unable to read frame count for %q: %v", celName, err)
 	}
 
 	// Read frame offsets.
 	frameOffsets := make([]uint32, frameCount+1)
-	err = binary.Read(fr, binary.LittleEndian, frameOffsets)
+	err = binary.Read(f, binary.LittleEndian, frameOffsets)
 	if err != nil {
 		return nil, fmt.Errorf("cel.GetFrames: unable to read frame offsets for %q: %v", celName, err)
 	}
 
-	for frameNum := uint32(0); frameNum < frameCount; frameNum++ {
+	// Read frame contents.
+	frames = make([][]byte, frameCount)
+	for frameNum := range frames {
 		// Ignore frame header.
 		headerSize := imgconf.GetHeaderSize(celName)
 		frameStart := int64(frameOffsets[frameNum]) + int64(headerSize)
 
+		// Read frame content.
 		frameEnd := int64(frameOffsets[frameNum+1])
 		frameSize := frameEnd - frameStart
-
-		// Read frame content.
 		frame := make([]byte, frameSize)
-		_, err := fr.ReadAt(frame, frameStart)
+		_, err = f.ReadAt(frame, frameStart)
 		if err != nil {
 			return nil, fmt.Errorf("cel.GetFrames: unable to read frame content for %q: %v", celName, err)
 		}
-		frames = append(frames, frame)
+		frames[frameNum] = frame
 	}
 
 	return frames, nil

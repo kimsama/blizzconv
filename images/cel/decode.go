@@ -11,9 +11,9 @@ func GetFrameDecoder(celName string, frame []byte, frameNum int) func(frame []by
 	frameSize := len(frame)
 	switch celName {
 	case "l1.cel", "l2.cel", "l3.cel", "l4.cel", "town.cel":
-		// Some regular (Type1) CEL images just happen to have the exact frame
-		// size of 0x220, 0x320 and 0x400. Therefore the isType* functions are
-		// required.
+		// Some regular (type 1) CEL images just happen to have a frame size of
+		// exactly 0x220, 0x320 or 0x400. Therefore the isType* functions are
+		// required to figure out the appropriate decoding function.
 		switch frameSize {
 		case 0x400:
 			if isType0(celName, frameNum) {
@@ -31,10 +31,9 @@ func GetFrameDecoder(celName string, frame []byte, frameNum int) func(frame []by
 			} else if isType3or5(frame) {
 				return DecodeFrameType5
 			}
-		default:
-			// Regular frame (type 1).
 		}
 	}
+	// Regular frame (type 1).
 	return DecodeFrameType1
 }
 
@@ -42,7 +41,7 @@ func GetFrameDecoder(celName string, frame []byte, frameNum int) func(frame []by
 //
 // ref: DecodeFrameType0
 func isType0(celName string, frameNum int) bool {
-	// The following frames are Type1, thus return false.
+	// The following frames are of type 1, thus return false.
 	switch celName {
 	case "l1.cel":
 		switch frameNum {
@@ -129,8 +128,7 @@ func isType3or5(frame []byte) bool {
 func DecodeFrameType1(frame []byte, width int, height int, pal color.Palette) image.Image {
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	setPixel := GetPixelSetter(width, height)
-	pos := 0
-	for pos < len(frame) {
+	for pos := 0; pos < len(frame); {
 		chunkSize := int(int8(frame[pos]))
 		pos++
 		if chunkSize < 0 {
@@ -150,7 +148,7 @@ func DecodeFrameType1(frame []byte, width int, height int, pal color.Palette) im
 }
 
 // GetPixelSetter returns a function that can be invoced to incrementally set
-// pixels, starting in the lower left corner, going from left to right, and then
+// pixels; starting in the lower left corner, going from left to right, and then
 // row by row from the bottom to the top of the image.
 func GetPixelSetter(width, height int) func(dst draw.Image, c color.Color) {
 	var x, y int

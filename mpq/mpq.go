@@ -39,14 +39,14 @@ func GetPath(name string) (path string, err error) {
 	if err != nil {
 		return "", err
 	}
-	return ExtractPath + relPath, nil
+	return AbsPath(relPath), nil
 }
 
 // GetRelPath returns the relative path of name.
 func GetRelPath(name string) (relPath string, err error) {
 	relPath, found := dict.GetString(name, "path")
 	if !found {
-		return "", fmt.Errorf("path not found for %q.", name)
+		return "", fmt.Errorf("mpq.GetRelPath: path not found for %q", name)
 	}
 	return relPath, nil
 }
