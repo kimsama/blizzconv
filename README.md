@@ -11,7 +11,12 @@ Supported formats
 * cl2
 * min
 * til
+
+Partially supported formats
+---------------------------
+
 * dun
+* trn
 
 Usage
 -----
@@ -47,7 +52,7 @@ The following steps can be taken to convert all CEL, CL2, MIN, TIL and DUN files
 
 		$ time img_dump -imgini=cel.ini -a
 
-7. Convert all CL2 images to PNG images. The following command creates XXX PNG images (XXX MB) and takes about XXX to complete on my computer.
+7. Convert all CL2 images to PNG images. The following command creates 373967 PNG images (1.8 GB) and takes about 105m to complete on my computer.
 
 		$ time img_dump -imgini=cl2.ini -a
 
@@ -62,8 +67,6 @@ The following steps can be taken to convert all CEL, CL2, MIN, TIL and DUN files
 10. Convert all DUN files to PNG images. The following command creates 45 PNG images (62 MB) and takes about 4m20s to complete on my computer.
 
 		$ time dun_dump -a
-
-Note: Step 7 takes ages to finish, so I'll fill in the missing details (e.g. XXX) once it has completed.
 
 public domain
 -------------
