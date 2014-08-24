@@ -1,8 +1,8 @@
 blizzconv
 =========
 
-This project attempts to provide functionality for converting different
-proprietary formats into modern formats with open specifications.
+This project aims to provide functionality for converting different proprietary
+formats into modern formats with open specifications.
 
 Supported formats
 -----------------
