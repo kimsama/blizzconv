@@ -52,7 +52,7 @@ The following steps can be taken to convert all CEL, CL2, MIN, TIL and DUN files
 
 		$ time img_dump -imgini=cel.ini -a
 
-7. Convert all CL2 images to PNG images. The following command creates 373967 PNG images (1.8 GB) and takes about 105m to complete on my computer.
+7. Convert all CL2 images to PNG images. The following command creates 373967 PNG images (1.8 GB) and takes about 1h45m to complete on my computer.
 
 		$ time img_dump -imgini=cl2.ini -a
 
