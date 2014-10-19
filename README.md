@@ -50,7 +50,8 @@ The following steps can be taken to convert all CEL, CL2, MIN, TIL and DUN files
 		$ ln -s $GOPATH/src/github.com/mewrnd/blizzconv/images/imgconf/cel.ini cel.ini
 		$ ln -s $GOPATH/src/github.com/mewrnd/blizzconv/images/imgconf/cl2.ini cl2.ini
 		$ ln -s $GOPATH/src/github.com/mewrnd/blizzconv/configs/dunconf/dun.ini dun.ini
-		# Fixes the two [faulty files](https://github.com/mewrnd/blizzconv/issues/2#issuecomment-58065868) `unravw.cel` and `banner2.dun`.
+		# Fixes the two faulty files `unravw.cel` and `banner2.dun`.
+		# ref: https://github.com/mewrnd/blizzconv/issues/2#issuecomment-58065868
 		$ mpqfix
 
 6. Convert all CEL images to PNG images. The following command creates 12045 PNG images (57 MB) and takes about 1m20s to complete on my computer.
