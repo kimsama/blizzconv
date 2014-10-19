@@ -31,7 +31,7 @@ The following steps can be taken to convert all CEL, CL2, MIN, TIL and DUN files
 		$ export GOPATH=$HOME/go
 		$ export PATH=$PATH:$GOPATH/bin
 
-3. Extract `DIABDAT.MPQ` using Ladislav Zezula's [MPQ Editor](http://www.zezula.net/en/mpq/download.html).
+3. Extract `DIABDAT.MPQ` using Ladislav Zezula's [MPQ Editor](http://www.zezula.net/en/mpq/download.html). Make sure to convert the file names in the [listfile](http://www.zezula.net/download/listfiles.zip) to lower case.
 
 4. Fix the two faulty files `unravw.cel` and `banner2.dun` as specified [here](https://github.com/mewrnd/blizzconv/issues/2#issuecomment-58065868).
 
