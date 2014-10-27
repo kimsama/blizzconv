@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mewpkg/goini"
+	"github.com/mewbak/goini"
 )
 
 // IniPath is the path to the 'cel.ini' or 'cl2.ini' file which provides CEL and

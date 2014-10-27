@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/mewpkg/goini"
+	"github.com/mewbak/goini"
 )
 
 var dict ini.Dict
