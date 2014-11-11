@@ -1,0 +1,28 @@
+language: go
+
+notifications:
+  email: false
+
+env:
+  global:
+    - secure: "gz/PGjy2aWAW9kt4Ejs/H6vm1Tk9s11K+5JlC6Bpa6IN7cothQ15DzDZfKokylA/64U2rctfgnFCInoL6MNw84zuGFg4KvYDwC8AbRN6OfoGnrI0vDZ6zDLeJ9/JRltAVAENfDY9MhF7sUs2risI7LAsrpO66EE4SSRe6BVxHCY="
+    - PATH=$HOME/gopath/bin:$PATH
+
+# TODO(u): Update import path of vet and cover when Travis starts using Go 1.4.
+
+before_install:
+  - go get code.google.com/p/go.tools/cmd/cover
+  - go get code.google.com/p/go.tools/cmd/vet
+  - go get golang.org/x/tools/cmd/goimports
+  - go get github.com/golang/lint/golint
+  - go get github.com/mattn/goveralls
+
+install:
+  - go get ./...
+
+before_script:
+  - wget https://gist.githubusercontent.com/mewmew/379014c9a2e6885e238d/raw/fb0c7d164113b1428f886dd470a613c74b9a9997/goclean.sh
+  - chmod +x goclean.sh
+
+script:
+  - ./goclean.sh

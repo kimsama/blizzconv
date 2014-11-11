@@ -1,6 +1,10 @@
 blizzconv
 =========
 
+[![Build Status](https://travis-ci.org/mewrnd/blizzconv.svg?branch=master)](https://travis-ci.org/mewrnd/blizzconv)
+[![Coverage Status](https://img.shields.io/coveralls/mewrnd/blizzconv.svg)](https://coveralls.io/r/mewrnd/blizzconv?branch=master)
+[![GoDoc](https://godoc.org/github.com/mewrnd/blizzconv?status.svg)](https://godoc.org/github.com/mewrnd/blizzconv)
+
 This project aims to provide functionality for converting different proprietary
 formats into modern formats with open specifications.
 
