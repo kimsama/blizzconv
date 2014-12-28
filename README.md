@@ -78,10 +78,9 @@ The following steps can be taken to convert all CEL, CL2, MIN, TIL and DUN files
 
 		$ time dun_dump -a
 
-public domain
+Public domain
 -------------
 
-Wherever possible the code of this project is hereby released into the
-*[public domain][]*.
+The source code and any original content of this repository is hereby released into the [public domain].
 
 [public domain]: https://creativecommons.org/publicdomain/zero/1.0/
