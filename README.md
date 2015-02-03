@@ -4,8 +4,7 @@
 [![Coverage Status](https://img.shields.io/coveralls/mewrnd/blizzconv.svg)](https://coveralls.io/r/mewrnd/blizzconv?branch=master)
 [![GoDoc](https://godoc.org/github.com/mewrnd/blizzconv?status.svg)](https://godoc.org/github.com/mewrnd/blizzconv)
 
-This project aims to provide functionality for converting different proprietary
-formats into modern formats with open specifications.
+This project aims to provide functionality for converting different proprietary formats into modern formats with open specifications.
 
 ## Supported formats
 
@@ -27,9 +26,9 @@ The following steps can be taken to convert all CEL, CL2, MIN, TIL and DUN files
 
 2. [Configure the GOPATH environment variable](http://golang.org/doc/code.html#GOPATH).
 
-		$ mkdir $HOME/go
-		$ export GOPATH=$HOME/go
-		$ export PATH=$PATH:$GOPATH/bin
+        $ mkdir $HOME/go
+        $ export GOPATH=$HOME/go
+        $ export PATH=$PATH:$GOPATH/bin
 
 3. Extract `DIABDAT.MPQ` using Ladislav Zezula's [MPQ Editor](http://www.zezula.net/en/mpq/download.html). Make sure to convert the file names in the [listfile](http://www.zezula.net/download/listfiles.zip) to lower case.
 
