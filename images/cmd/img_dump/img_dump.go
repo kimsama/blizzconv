@@ -25,8 +25,8 @@ import (
 	"os"
 	"path"
 	"strings"
-
-	"github.com/0xC3/progress/barcli"
+    //win-fix
+	//"github.com/0xC3/progress/barcli"
 	"github.com/mewkiz/pkg/imgutil"
 	"github.com/mewrnd/blizzconv/images/cel"
 	"github.com/mewrnd/blizzconv/images/cl2"
@@ -60,7 +60,8 @@ func usage() {
 }
 
 // bar represents the progress bar.
-var bar *barcli.Bar
+//win-fix
+//var bar *barcli.Bar
 
 func main() {
 	if flag.NArg() > 0 {
@@ -73,10 +74,12 @@ func main() {
 		log.Fatalln(err)
 	}
 	if flagAll {
+	    /* win-fix
 		bar, err = barcli.New(imgconf.Len())
 		if err != nil {
 			log.Fatalln(err)
 		}
+		*/
 		// dump all images in the ini file.
 		err := imgconf.AllFunc(dump)
 		if err != nil {
@@ -100,7 +103,8 @@ func main() {
 // and dumps the image's frames, once for each image config.
 func dump(imgName string) (err error) {
 	if flagAll {
-		bar.Inc()
+		//win-fix
+		//bar.Inc()
 	}
 	_, found := imgconf.GetImageCount(imgName)
 	if found {
