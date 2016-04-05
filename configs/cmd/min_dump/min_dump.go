@@ -26,7 +26,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/0xC3/progress/barcli"
+	//"github.com/0xC3/progress/barcli"
 	"github.com/mewkiz/pkg/imgutil"
 	"github.com/mewrnd/blizzconv/configs/min"
 	"github.com/mewrnd/blizzconv/images/cel"
@@ -71,7 +71,7 @@ func main() {
 }
 
 // bar represents the progress bar.
-var bar *barcli.Bar
+//var bar *barcli.Bar
 
 // dumpPrefix is the name of the dump directory.
 const dumpPrefix = "_dump_/"
@@ -96,10 +96,12 @@ func minDump(minName string) (err error) {
 			dbg.Println("using pal:", relPalPath)
 			palDir = path.Base(relPalPath) + "/"
 		}
+		/*
 		bar, err = barcli.New(len(pillars))
 		if err != nil {
 			return err
 		}
+		*/
 		levelFrames, err := cel.DecodeAll(imgName, conf)
 		if err != nil {
 			return err
@@ -126,7 +128,7 @@ func minDump(minName string) (err error) {
 func dumpPillars(pillars []min.Pillar, levelFrames []image.Image, dumpDir string) (err error) {
 	for pillarNum, pillar := range pillars {
 		pillarPath := dumpDir + fmt.Sprintf("pillar_%04d.png", pillarNum)
-		bar.Inc()
+		//bar.Inc()
 		img := pillar.Image(levelFrames)
 		err = imgutil.WriteFile(pillarPath, img)
 		if err != nil {

@@ -26,7 +26,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/0xC3/progress/barcli"
+	//"github.com/0xC3/progress/barcli"
 	"github.com/mewkiz/pkg/imgutil"
 	"github.com/mewrnd/blizzconv/configs/min"
 	"github.com/mewrnd/blizzconv/configs/til"
@@ -72,7 +72,7 @@ func main() {
 }
 
 // bar represents the progress bar.
-var bar *barcli.Bar
+//var bar *barcli.Bar
 
 // dumpPrefix is the name of the dump directory.
 const dumpPrefix = "_dump_/"
@@ -103,10 +103,12 @@ func tilDump(tilName string) (err error) {
 			dbg.Println("using pal:", relPalPath)
 			palDir = path.Base(relPalPath) + "/"
 		}
+		/*
 		bar, err = barcli.New(len(squares))
 		if err != nil {
 			return err
 		}
+		*/
 		levelFrames, err := cel.DecodeAll(imgName, conf)
 		if err != nil {
 			return err
@@ -133,7 +135,7 @@ func tilDump(tilName string) (err error) {
 func dumpSquares(squares []til.Square, pillars []min.Pillar, levelFrames []image.Image, dumpDir string) (err error) {
 	for squareNum, square := range squares {
 		squarePath := dumpDir + fmt.Sprintf("square_%04d.png", squareNum)
-		bar.Inc()
+		//bar.Inc()
 		img := square.Image(pillars, levelFrames)
 		err = imgutil.WriteFile(squarePath, img)
 		if err != nil {
